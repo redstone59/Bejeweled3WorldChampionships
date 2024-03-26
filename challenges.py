@@ -2,6 +2,8 @@ from dataclasses import *
 from typing import Literal
 import json
 
+ALLOWED_MODES = json.load(open("./jsons/allowed_modes.json"))
+
 class InvalidChallengeError(Exception):
     pass
 
@@ -59,6 +61,7 @@ def check_challenge_metadata(metadata: dict):
     - The challenge's mode is not "timed" or "marathon".
     - A timed challenge does not specify a time.
     """
+    
     for required in ["name", "author", "description", "mode"]:
         if required not in metadata.keys():
             raise InvalidChallengeError(f"Invalid challenge JSON, metadata missing required field '{required}'.")
@@ -70,9 +73,26 @@ def check_challenge_metadata(metadata: dict):
         raise InvalidChallengeError("No time specified for timed challenge.")
 
 def check_subchallenge_data(subchallenge: dict):
+    """
+    Raises an error if a subchallenge's data is incorrect.
+    
+    Raises `InvalidSubchallengeError` if:
+    - The subchallenge is missing a required field (objective, mode, multiplier)
+    - The subchallenge's mode is not "value", "timed", or "endless".
+    - The subchallenge has an invalid mode for the objective.
+    - There is no `condition` field for any `value` subchallenge.
+    - There is no `time` field for a `timed` subchallenge or a subchallenge with the time bonus enabled.
+    """
+    
     for required in ["objective", "mode", "multiplier"]:
         if required not in subchallenge.keys():
             raise InvalidSubchallengeError(f"Subchallenge {subchallenge["objective"]} missing required field '{required}'.")
+    
+    if subchallenge["mode"] not in ALLOWED_MODES[subchallenge["objective"]]:
+        allowed_modes = ALLOWED_MODES[subchallenge["objective"]]
+        for i in range(len(allowed_modes)):
+            allowed_modes[i] = f"'{allowed_modes[i]}'"
+        raise InvalidSubchallengeError(f"Invalid mode {subchallenge["mode"]} for subchallenge {subchallenge["objective"]}. Valid modes are {', '.join(allowed_modes)}")
     
     if subchallenge["mode"] == "value":
         if "condition" not in subchallenge.keys():

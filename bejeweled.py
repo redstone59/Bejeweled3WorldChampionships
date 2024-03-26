@@ -49,9 +49,3 @@ class Pointer:
     
     def __set__(self, value: int):
         self.set_value(value)
-
-b = BejeweledThreeProcess()
-score_pointer = Pointer(b, 0xbe0, 0xd20)
-while True:
-    score_pointer.update_address()
-    print(score_pointer.get_value())

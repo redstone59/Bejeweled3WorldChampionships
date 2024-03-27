@@ -1,0 +1,224 @@
+{
+    "Cascade": {
+        "allowed_modes": ["value"],
+        "pointer_offsets": ["0xbe0", "0x2444"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Classic": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xd20"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Zen": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xd20"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Lightning": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xd20"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Poker": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xd20"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Butterflies": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xd20"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "IceStorm": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xd20"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "DiamondMine": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xe00"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "ClasLevel": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xe04"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "ZenLevel": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xe04"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "LightMult": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xe0c"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "LightTime": {
+        "allowed_modes": ["value", "timed"],
+        "pointer_offsets": ["0xbe0", "0x30a4"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "LightBlaze": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0x1188"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "QuestCompleted": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "PokerLimit": {
+        "allowed_modes": ["value"],
+        "pointer_offsets": ["0xbe0", "0x39d8"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "PokerHand": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0x39d8"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "PokerSkull": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0x3964"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "ButterClear": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xcf0"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "ButterCombo": {
+        "allowed_modes": ["value", "timed"],
+        "pointer_offsets": ["0xbe0", "0xcf4"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "IceColumn": {
+        "allowed_modes": ["value", "timed"],
+        "pointer_offsets": ["0xbe0", "0xcd0"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "IceCombo": {
+        "allowed_modes": ["value", "timed"],
+        "pointer_offsets": ["0xbe0", "0x3688"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "DiamondDepth": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0x31f0", "0x4f0"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "DiamondTreasure": {
+        "allowed_modes": ["value", "timed"],
+        "pointer_offsets": ["0xbe0"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Balance": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xe00"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Stratamax": {
+        "allowed_modes": ["value"],
+        "pointer_offsets": ["0xbe0", "0xe00"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "GoldRush": {
+        "allowed_modes": ["value"],
+        "pointer_offsets": ["0xbe0", "0xe00"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Alchemy": {
+        "allowed_modes": ["value", "timed"],
+        "pointer_offsets": ["0xbe0", "0xe00"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "TimeBomb": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xe00"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "MatchBomb": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xe00"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Avalanche": {
+        "allowed_modes": ["value", "timed", "endless"],
+        "pointer_offsets": ["0xbe0", "0xe00"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "WallBlast": {
+        "allowed_modes": ["value", "timed"],
+        "pointer_offsets": ["0xbe0", "0xe00"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Treasure": {
+        "allowed_modes": ["value"],
+        "pointer_offsets": ["0xbe0", "0xe00"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Sand": {
+        "allowed_modes": ["value"],
+        "pointer_offsets": ["0xbe0", "0xe00"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Blaster": {
+        "allowed_modes": ["value"],
+        "pointer_offsets": ["0xbe0", "0x22e8"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Inferno": {
+        "allowed_modes": ["value", "timed"],
+        "pointer_offsets": ["0xbe0", "0xcb0"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Stellar": {
+        "allowed_modes": ["value", "timed"],
+        "pointer_offsets": ["0xbe0", "0xcb4"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    },
+    "Chromatic": {
+        "allowed_modes": ["value", "timed"],
+        "pointer_offsets": ["0xbe0", "0xcb8"],
+        "description_string": "",
+        "abbreviated_string": ["", ""]
+    }
+}

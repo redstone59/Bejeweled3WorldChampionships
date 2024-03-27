@@ -2,7 +2,7 @@ from dataclasses import *
 from typing import Literal
 import json
 
-ALLOWED_MODES = json.load(open("./jsons/allowed_modes.json"))
+CHALLENGE_DATA = json.load(open("./challenges.json"))
 
 class InvalidChallengeError(Exception):
     pass
@@ -84,12 +84,14 @@ def check_subchallenge_data(subchallenge: dict):
     - There is no `time` field for a `timed` subchallenge or a subchallenge with the time bonus enabled.
     """
     
+    subchallenge_data = CHALLENGE_DATA[subchallenge["objective"]]
+    
     for required in ["objective", "mode", "multiplier"]:
         if required not in subchallenge.keys():
             raise InvalidSubchallengeError(f"Subchallenge {subchallenge["objective"]} missing required field '{required}'.")
     
-    if subchallenge["mode"] not in ALLOWED_MODES[subchallenge["objective"]]:
-        allowed_modes = ALLOWED_MODES[subchallenge["objective"]]
+    if subchallenge["mode"] not in subchallenge_data["allowed_modes"]:
+        allowed_modes = subchallenge_data["allowed_modes"]
         for i in range(len(allowed_modes)):
             allowed_modes[i] = f"'{allowed_modes[i]}'"
         raise InvalidSubchallengeError(f"Invalid mode {subchallenge["mode"]} for subchallenge {subchallenge["objective"]}. Valid modes are {', '.join(allowed_modes)}")

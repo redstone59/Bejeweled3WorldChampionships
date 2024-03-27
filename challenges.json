@@ -168,7 +168,7 @@
     },
     "PokerLimit": {
         "allowed_modes": ["value"],
-        "pointer_offsets": ["0xbe0", "0x39d8"],
+        "pointer_offsets": ["0xbe0", "0x3960"],
         "description_string": "Poker: Get the best score you can in <condition> hands!",
         "abbreviated_string": ["", ""],
         "requirements": {

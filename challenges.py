@@ -2,7 +2,7 @@ from dataclasses import *
 from typing import Literal
 import json
 
-CHALLENGE_DATA = json.load(open("./challenges.json"))
+CHALLENGE_DATA: dict = json.load(open("./challenges.json"))
 
 class InvalidChallengeError(Exception):
     pass
@@ -39,6 +39,16 @@ class Subchallenge:
         
         result["multiplier"] = self.multiplier
     
+    def get_initial_value(self):
+        open_requirements = CHALLENGE_DATA[self.objective]["requirements"]
+        
+        if "initial_value" in open_requirements:
+            initial_value = open_requirements["initial_value"]
+        else:
+            initial_value = 0
+        
+        return initial_value
+    
     def __str__(self):
         subchallenge_data = CHALLENGE_DATA[self.objective]
         
@@ -70,8 +80,20 @@ class Challenge:
     time: int | None = None
     
     def next(self):
-        if len(self.subchallenges) == 0: return None
+        if self.is_over(): return None
         return self.subchallenges.pop(0)
+    
+    def is_over(self):
+        return len(self.subchallenges) == 0
+    
+    def __str__(self):
+        return f"""
+{self.name} by {self.author}
+{len(self.subchallenges)} challenges long.
+{"Marathon challenge" if self.mode == "marathon" else f"Timed challenge: Lasts {self.time}s"}
+
+{self.description}
+"""
 
 def check_challenge_metadata(metadata: dict):
     """

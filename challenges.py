@@ -13,7 +13,7 @@ class InvalidSubchallengeError(Exception):
 @dataclass
 class Subchallenge:
     objective: str
-    mode: str
+    mode: Literal["value", "timed", "endless"]
     multiplier: int
     condition: int | None = None
     time_bonus_enabled: bool = False
@@ -38,6 +38,27 @@ class Subchallenge:
         if self.extra != None: result["extra"] = self.extra
         
         result["multiplier"] = self.multiplier
+    
+    def __str__(self):
+        subchallenge_data = CHALLENGE_DATA[self.objective]
+        
+        if self.mode == "value":
+            result_string: str = subchallenge_data["description_string"]
+            result_string = result_string.replace("<condition>", str(self.condition))
+        elif self.mode == "endless":
+            result_string: str = subchallenge_data["timed_string"]
+            result_string = result_string.replace("<suffix>", "until the challenge ends")
+        else:
+            result_string: str = subchallenge_data["timed_string"]
+            result_string = result_string.replace("<suffix>", subchallenge_data["time_suffix"])
+            result_string = result_string.replace("<time>", str(self.time))
+        
+        if self.objective == "PokerHand" and self.condition >= 2:
+            result_string = result_string.replace("<extra>", str(self.extra) + "s")
+        else:
+            result_string = result_string.replace("<extra>", str(self.extra))
+        
+        return result_string
 
 @dataclass
 class Challenge:
@@ -107,15 +128,24 @@ def check_subchallenge_data(subchallenge: dict):
     if requires_time_field and "time" not in subchallenge.keys():
         raise InvalidSubchallengeError(f"No time specified for timed subchallenge {subchallenge["objective"]}")
 
+    poker_hands = ["Pair", "Spectrum", "Two Pair", "Three of a Kind", "Full House", "Four of a Kind", "Flush"]
+    if subchallenge["objective"] == "PokerHand" and subchallenge["extra"] not in poker_hands:
+        raise InvalidSubchallengeError(f"No hand specificed for subchallenge {subchallenge["objective"]}")
+
 def load_challenge_json(json_string):
-    contents = json.loads(json_string)
-    if len(contents) != 2: raise InvalidChallengeError("Invalid challenge JSON.")
-    metadata = contents[0]
+    contents: dict = json.loads(json_string)
+    
+    if "challenge_information" not in contents.keys():
+        raise InvalidChallengeError("No metadata in challenge, fix by adding 'challenge_information' dictionary.")
+    if "subchallenges" not in contents.keys():
+        raise InvalidChallengeError("No subchallenges in challenge, fix by adding list of subchallenges under list 'subchallenges'.")
+    
+    metadata = contents["challenge_information"]
     check_challenge_metadata(metadata)
     
     subchallenges = []
     
-    for subchallenge in contents[1]:
+    for subchallenge in contents["subchallenges"]:
         check_subchallenge_data(subchallenge)
         subchallenge_to_add = Subchallenge(subchallenge["objective"],
                                            subchallenge["mode"],
@@ -130,6 +160,9 @@ def load_challenge_json(json_string):
         
         if "time" in subchallenge.keys():
             subchallenge_to_add.time = subchallenge["time"]
+        
+        if "extra" in subchallenge.keys():
+            subchallenge_to_add.extra = subchallenge["extra"]
         
         subchallenges += [subchallenge_to_add]
             

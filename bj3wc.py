@@ -96,7 +96,6 @@ class Bejeweled3WorldChampionships:
     
     def open_challenge(self, challenge: Challenge):
         self.challenge = challenge
-        print(challenge)
         
     def do_subchallenge(self, subchallenge: Subchallenge):
         self.game.reset_scores()

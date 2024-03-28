@@ -11,6 +11,7 @@ class Bejeweled3WorldChampionships:
         self.game = BejeweledThreeProcess()
         
         self.challenge_end_time = 0
+        self.penalty = 120
         self.scores = {}
     
     def add_subchallenge_extra(self, subchallenge: Subchallenge):
@@ -31,74 +32,6 @@ class Bejeweled3WorldChampionships:
             else:
                 extra_pointer.set_value(subchallenge.extra)
     
-    def is_challenge_time_up(self):
-        if self.challenge.mode == "marathon": return False
-        return time.time() >= self.challenge_end_time
-    
-    def modify_quest_goals(self, subchallenge: Subchallenge):
-        difference = None
-        
-        match subchallenge.objective:
-            case "Avalanche":
-                difference = MINIQUEST_GOALS[self.game.get_quest_id()] - subchallenge.condition
-                Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
-            
-            case "Balance":
-                balance_amount = (subchallenge.condition // 2) if subchallenge.mode == "value" else 34710
-                Pointer(self.game, 0xbe0, 0x3238).set_value(balance_amount) # Set BalanceGoal
-                Pointer(self.game, 0xbe0, 0x323c).set_value(9) # Fix speed (could probably make this an extra tbh)
-            
-            case "BuriedTreasure" | "GoldRush" | "Sandstorm" | "WallBlast":
-                Pointer(self.game, 0xbe0, 0x3238).set_value(1800) # Set time to 30 minutes
-            
-            case "Poker" | "PokerLimit" | "PokerHand" | "PokerSkull":
-                if self.game.get_quest_id() != 1000:
-                    Pointer(self.game, 0xbe0, 0x323c).set_value(100000)
-                    Pointer(self.game, 0xbe0, 0x395c).set_value(1000)
-            
-            case "TimeBomb" | "MatchBomb":
-                difference = -1000
-                Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
-            
-            case "Stratamax":
-                difference = -1000
-                Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
-                Pointer(self.game, 0xbe0, 0x3238).set_value(subchallenge.condition)
-                Pointer(self.game, 0xbe0, 0x323c).set_value(subchallenge.condition)
-        
-        return difference
-             
-    def get_condition_pointer(self, subchallenge: Subchallenge):
-        pointer_offsets = CHALLENGE_DATA[subchallenge.objective]["pointer_offsets"]
-        
-        if subchallenge.objective == "PokerHand":
-            poker_hands = ["Pair", "Spectrum", "2 Pair", "3 of a Kind", "Full House", "4 of a Kind", "Flush"]
-            return Pointer(self.game, 0xbe0, 0x39d8 + 4 * poker_hands.index(subchallenge.extra))
-        
-        for i in range(len(pointer_offsets)):
-            try:
-                pointer_offsets[i] = int(pointer_offsets[i], 0)
-            except:
-                continue
-
-        return Pointer(self.game, *pointer_offsets)
-    
-    def get_score_pointer(self, subchallenge: Subchallenge):
-        quest_challenges = ["DiamondMine", "DiamondDepth", "DiamondTreasure",
-                            "Balance", "Stratamax", "GoldRush", "Alchemy",
-                            "TimeBomb", "MatchBomb", "Avalanche", "WallBlast",
-                            "Treasure", "Sand"
-                            ]
-        if subchallenge.objective not in quest_challenges:
-            score_pointer = Pointer(self.game, 0xbe0, 0xd20)
-        else:
-            score_pointer = Pointer(self.game, 0xbe0, 0xe00)
-        
-        return score_pointer
-    
-    def open_challenge(self, challenge: Challenge):
-        self.challenge = challenge
-        
     def do_subchallenge(self, subchallenge: Subchallenge):
         self.game.reset_scores()
         condition_pointer = self.get_condition_pointer(subchallenge)
@@ -138,8 +71,8 @@ class Bejeweled3WorldChampionships:
                 print("Challenge failed! (game over or reset detected)")
                 
                 if self.challenge.mode == "timed":
-                    print("90 second penalty!")
-                    self.challenge_end_time -= 90
+                    print(f"{self.penalty} second penalty!")
+                    self.challenge_end_time -= self.penalty
                 
                 get_score = lambda: previous_score
                 break
@@ -147,8 +80,8 @@ class Bejeweled3WorldChampionships:
                 print("Challenge failed! (time ran out)")
                 
                 if self.challenge.mode == "timed":
-                    print("90 second penalty!")
-                    self.challenge_end_time -= 90
+                    print(f"{self.penalty} second penalty!")
+                    self.challenge_end_time -= self.penalty
                     
                 break
 
@@ -156,11 +89,93 @@ class Bejeweled3WorldChampionships:
             get_score = lambda: max(0, int((subchallenge_end_time - time.time()) * 1000))
 
         return get_score() - difference
+             
+    def get_condition_pointer(self, subchallenge: Subchallenge):
+        pointer_offsets = CHALLENGE_DATA[subchallenge.objective]["pointer_offsets"]
+        
+        if subchallenge.objective == "PokerHand":
+            poker_hands = ["Pair", "Spectrum", "2 Pair", "3 of a Kind", "Full House", "4 of a Kind", "Flush"]
+            return Pointer(self.game, 0xbe0, 0x39d8 + 4 * poker_hands.index(subchallenge.extra))
+        
+        for i in range(len(pointer_offsets)):
+            try:
+                pointer_offsets[i] = int(pointer_offsets[i], 0)
+            except:
+                continue
+
+        return Pointer(self.game, *pointer_offsets)
     
+    def get_score_pointer(self, subchallenge: Subchallenge):
+        quest_challenges = ["DiamondMine", "DiamondDepth", "DiamondTreasure",
+                            "Balance", "Stratamax", "GoldRush", "Alchemy",
+                            "TimeBomb", "MatchBomb", "Avalanche", "WallBlast",
+                            "Treasure", "Sand"
+                            ]
+        if subchallenge.objective not in quest_challenges:
+            score_pointer = Pointer(self.game, 0xbe0, 0xd20)
+        else:
+            score_pointer = Pointer(self.game, 0xbe0, 0xe00)
+        
+        return score_pointer
+    
+    def is_challenge_time_up(self):
+        if self.challenge.mode == "marathon": return False
+        return time.time() >= self.challenge_end_time
+    
+    def modify_quest_goals(self, subchallenge: Subchallenge):
+        difference = None
+        
+        match subchallenge.objective:
+            case "Avalanche":
+                difference = MINIQUEST_GOALS[self.game.get_quest_id()] - subchallenge.condition
+                Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
+            
+            case "Balance":
+                balance_amount = (subchallenge.condition // 2) if subchallenge.mode == "value" else 34710
+                Pointer(self.game, 0xbe0, 0x3238).set_value(balance_amount) # Set BalanceGoal
+                Pointer(self.game, 0xbe0, 0x323c).set_value(9) # Fix speed (could probably make this an extra tbh)
+            
+            case "BuriedTreasure" | "GoldRush" | "Sandstorm" | "WallBlast":
+                Pointer(self.game, 0xbe0, 0x3238).set_value(1800) # Set time to 30 minutes
+            
+            case "Poker" | "PokerLimit" | "PokerHand" | "PokerSkull":
+                if self.game.get_quest_id() != 1000:
+                    Pointer(self.game, 0xbe0, 0x323c).set_value(100000)
+                    Pointer(self.game, 0xbe0, 0x395c).set_value(1000)
+            
+            case "TimeBomb" | "MatchBomb":
+                difference = -1000
+                Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
+            
+            case "Stratamax":
+                difference = -1000
+                Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
+                Pointer(self.game, 0xbe0, 0x3238).set_value(subchallenge.condition)
+                Pointer(self.game, 0xbe0, 0x323c).set_value(subchallenge.condition)
+        
+        return difference
+    
+    def open_challenge(self, challenge: Challenge):
+        self.challenge = challenge
+
+    def start(self):
+        if self.challenge == None:
+            raise ValueError("No challenge has been loaded. Use Bejeweled3WorldChampionships().open_challenge()")
+        
+        if self.challenge.mode == "timed":
+            self.challenge_end_time = time.time() + self.challenge.time
+        
+        self.subchallenge_loop()
+        add_and_display_scores(self.scores)
+
     def subchallenge_loop(self): 
         while not (self.challenge.is_over() or self.is_challenge_time_up()):
             subchallenge = self.challenge.next()
+            
             print(subchallenge)
+            
+            if subchallenge.objective in ["ClasLevel", "ZenLevel"]: # Zero-indexed internally, One-indexed externally
+                subchallenge.condition -= 1
             
             dordle_time = time.time()
             self.wait_until_open(subchallenge)
@@ -173,16 +188,6 @@ class Bejeweled3WorldChampionships:
             final_score = self.do_subchallenge(subchallenge)
             
             self.scores[subchallenge.objective] = {"multiplier": subchallenge.multiplier, "score": final_score}
-    
-    def start(self):
-        if self.challenge == None:
-            raise ValueError("No challenge has been loaded. Use Bejeweled3WorldChampionships().open_challenge()")
-        
-        if self.challenge.mode == "timed":
-            self.challenge_end_time = time.time() + self.challenge.time
-        
-        self.subchallenge_loop()
-        add_and_display_scores(self.scores)
     
     def wait_until_open(self, subchallenge: Subchallenge):
         """

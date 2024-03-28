@@ -238,7 +238,7 @@
     },
     "IceCombo": {
         "allowed_modes": ["value", "timed"],
-        "pointer_offsets": ["0xbe0", "0x3688"],
+        "pointer_offsets": ["0xbe0", "0x36B8"],
         "description_string": "Ice Storm: Get to a column combo of <condition>!",
         "timed_string": "Ice Storm: Get the highest column combo you <suffix>!",
         "time_suffix": "within <time> seconds",

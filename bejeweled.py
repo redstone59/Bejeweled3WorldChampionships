@@ -83,8 +83,12 @@ class Pointer:
         self.address = process.read(*offsets[:-1]) + offsets[-1]
         self.offsets = offsets
     
-    def get_value(self):
-        return self.process.process.read(self.address)
+    def get_value(self) -> int:
+        value = self.process.process.read(self.address)
+        if value >> 31 & 1: # Test if sign bit is set
+            sign_bit = 1 << 32
+            value -= sign_bit
+        return value
     
     read = get_value
     

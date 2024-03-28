@@ -55,6 +55,8 @@ class Subchallenge:
         if self.mode == "value":
             result_string: str = subchallenge_data["description_string"]
             result_string = result_string.replace("<condition>", str(self.condition))
+            if self.time_bonus_enabled:
+                result_string += "\b as quickly as possible!" # This smells bad.
         elif self.mode == "endless":
             result_string: str = subchallenge_data["timed_string"]
             result_string = result_string.replace("<suffix>", "until the challenge ends")

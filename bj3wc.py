@@ -133,10 +133,20 @@ class Bejeweled3WorldChampionships:
             current_score = get_score()
             if not subchallenge.time_bonus_enabled and current_score < previous_score:
                 print("Challenge failed! (game over or reset detected)")
+                
+                if self.challenge.mode == "timed":
+                    print("90 second penalty!")
+                    self.challenge_end_time -= 90
+                
                 get_score = lambda: previous_score
                 break
             elif subchallenge.time_bonus_enabled and current_score <= 0:
                 print("Challenge failed! (time ran out)")
+                
+                if self.challenge.mode == "timed":
+                    print("90 second penalty!")
+                    self.challenge_end_time -= 90
+                    
                 break
 
         return get_score() - difference

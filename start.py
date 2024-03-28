@@ -11,6 +11,10 @@ def open_challenge_file():
 
 b = Bejeweled3WorldChampionships()
 in_challenges = True
+
+print("Bejeweled 3 World Championships v0.1")
+print("Find any bugs? Open an issue on the GitHub repo: https://github.com/redstone59/Bejeweled3WorldChampionships")
+
 while in_challenges:
     challenge_file = open_challenge_file()
     

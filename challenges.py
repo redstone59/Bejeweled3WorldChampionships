@@ -2,9 +2,9 @@ from dataclasses import *
 from typing import Literal
 
 import json
-import pathlib
+import os, sys, pathlib
 
-PATH = pathlib.Path(__file__).parent.resolve()
+PATH = os.path.dirname(os.path.abspath(sys.argv[0]))
 CHALLENGE_DATA: dict = json.load(open(pathlib.Path(PATH, "challenges.json")))
 
 class InvalidChallengeError(Exception):

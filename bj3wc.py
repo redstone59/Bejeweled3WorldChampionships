@@ -147,7 +147,11 @@ class Bejeweled3WorldChampionships:
             subchallenge = self.challenge.next()
             print(subchallenge)
             
+            dordle_time = time.time()
             self.wait_until_open(subchallenge)
+            if self.challenge.mode == "timed":
+                self.challenge_end_time += time.time() - dordle_time
+            
             time.sleep(0.5)
             print("go!")
             
@@ -201,5 +205,6 @@ def add_and_display_scores(challenge_dict: dict):
         print(f"{key}: {subchallenge["score"]:,} * {subchallenge["multiplier"]} = {subchallenge["score"] * subchallenge["multiplier"]}")
         total_score += subchallenge["score"] * subchallenge["multiplier"]
     
+    print("---------------")
     print(f"TOTAL SCORE: {total_score:,}")
     print("---------------")

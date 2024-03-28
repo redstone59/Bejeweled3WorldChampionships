@@ -1,8 +1,11 @@
 from dataclasses import *
 from typing import Literal
-import json
 
-CHALLENGE_DATA: dict = json.load(open("./challenges.json"))
+import json
+import pathlib
+
+PATH = pathlib.Path(__file__).parent.resolve()
+CHALLENGE_DATA: dict = json.load(open(pathlib.Path(PATH, "challenges.json")))
 
 class InvalidChallengeError(Exception):
     pass

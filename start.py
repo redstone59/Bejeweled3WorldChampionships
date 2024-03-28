@@ -1,10 +1,18 @@
 from bj3wc import *
-from tkinter import filedialog
+from tkinter import filedialog, Tk
+
+def open_challenge_file():
+    root = Tk()
+    root.wm_attributes("-topmost", 1)
+    root.withdraw()
+    file = filedialog.askopenfilename(parent = root, title = "Open challenge file", filetypes = [("JSON file", ".json")])
+    root.destroy()
+    return file
 
 b = Bejeweled3WorldChampionships()
 in_challenges = True
 while in_challenges:
-    challenge_file = filedialog.askopenfilename(title = "Open challenge file", filetypes = [("JSON file", ".json")])
+    challenge_file = open_challenge_file()
     
     try:
         with open(challenge_file) as file:
@@ -16,5 +24,5 @@ while in_challenges:
         
         b.start()
         in_challenges = input("Play another challenge? (Y/N) ").lower().startswith("y")
-    except (InvalidChallengeError, InvalidSubchallengeError):
+    except (InvalidChallengeError, InvalidSubchallengeError, FileNotFoundError):
         print("Invalid challenge chosen!")

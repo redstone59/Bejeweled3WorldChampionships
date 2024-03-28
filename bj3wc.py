@@ -2,7 +2,7 @@ from bejeweled import *
 from gui import *
 from challenges import *
 
-MINIQUEST_GOALS: list = json.load(open("./miniquest_goals.json"))
+MINIQUEST_GOALS: list = json.load(open(pathlib.Path(PATH, "miniquest_goals.json")))
 
 class Bejeweled3WorldChampionships:
     def __init__(self):
@@ -132,11 +132,11 @@ class Bejeweled3WorldChampionships:
             previous_score = current_score
             current_score = get_score()
             if not subchallenge.time_bonus_enabled and current_score < previous_score:
-                print("Skipping due to score decrease game over or reset")
+                print("Challenge failed! (game over or reset detected)")
                 get_score = lambda: previous_score
                 break
             elif subchallenge.time_bonus_enabled and current_score <= 0:
-                print("Skipping since time has run out")
+                print("Challenge failed! (time ran out)")
                 break
 
         return get_score() - difference
@@ -201,7 +201,7 @@ def add_and_display_scores(challenge_dict: dict):
     
     for key in challenge_dict:
         subchallenge = challenge_dict[key]
-        print(f"{key}: {subchallenge["score"]:,} * {subchallenge["multiplier"]} = {subchallenge["score"] * subchallenge["multiplier"]}")
+        print(f"{key}: {subchallenge["score"]:,} * {subchallenge["multiplier"]:,} = {subchallenge["score"] * subchallenge["multiplier"]:,}")
         total_score += subchallenge["score"] * subchallenge["multiplier"]
     
     print("---------------")

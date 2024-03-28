@@ -95,7 +95,7 @@ class Challenge:
         return f"""
 {self.name} by {self.author}
 {len(self.subchallenges)} challenges long.
-{"Marathon challenge" if self.mode == "marathon" else f"Timed challenge: Lasts {self.time}s"}
+{"Marathon challenge" if self.mode == "marathon" else f"Timed challenge: Lasts {self.time // 60}m {self.time % 60}s"}
 
 {self.description}
 """

@@ -166,6 +166,7 @@ class Bejeweled3WorldChampionships:
             self.challenge_end_time = time.time() + self.challenge.time
         
         self.subchallenge_loop()
+        print("Time!")
         add_and_display_scores(self.scores)
 
     def subchallenge_loop(self): 
@@ -183,7 +184,7 @@ class Bejeweled3WorldChampionships:
                 self.challenge_end_time += time.time() - dordle_time
             
             time.sleep(0.5)
-            print("go!")
+            print("Go!")
             
             final_score = self.do_subchallenge(subchallenge)
             

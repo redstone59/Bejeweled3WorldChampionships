@@ -1,6 +1,8 @@
 from bj3wc import *
 from tkinter import filedialog, Tk
 
+VER = "0.2-alpha"
+
 def open_challenge_file():
     root = Tk()
     root.wm_attributes("-topmost", 1)
@@ -12,7 +14,7 @@ def open_challenge_file():
 b = Bejeweled3WorldChampionships()
 in_challenges = True
 
-print("Bejeweled 3 World Championships v0.1")
+print(f"Bejeweled 3 World Championships v{VER}")
 print("Find any bugs? Open an issue on the GitHub repo: https://github.com/redstone59/Bejeweled3WorldChampionships")
 
 while in_challenges:
@@ -28,5 +30,6 @@ while in_challenges:
         
         b.start()
         in_challenges = input("Play another challenge? (Y/N) ").lower().startswith("y")
-    except (InvalidChallengeError, InvalidSubchallengeError, FileNotFoundError):
+    except (InvalidChallengeError, InvalidSubchallengeError, FileNotFoundError) as e:
+        print(f"{e.__class__}: {e}")
         print("Invalid challenge chosen!")

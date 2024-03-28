@@ -61,6 +61,8 @@ class Bejeweled3WorldChampionships:
                 Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
             
             case "Stratamax":
+                difference = -1000
+                Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
                 Pointer(self.game, 0xbe0, 0x3238).set_value(subchallenge.condition)
                 Pointer(self.game, 0xbe0, 0x323c).set_value(subchallenge.condition)
         
@@ -119,11 +121,11 @@ class Bejeweled3WorldChampionships:
             case "endless":
                 over_condition = lambda: time.time() >= self.challenge_end_time
         
+        if subchallenge.objective == "Stratamax":
+            over_condition = lambda: Pointer(self.game, 0xbe0, 0x323c).get_value() <= 0
+        
         score_pointer = self.get_score_pointer(subchallenge)
-        if subchallenge.mode == "value" and subchallenge.time_bonus_enabled:
-            get_score = lambda: max(0, int((subchallenge_end_time - time.time()) * 1000))
-        else:
-            get_score = lambda: score_pointer.get_value()
+        get_score = lambda: score_pointer.get_value()
         
         current_score = get_score()
         
@@ -131,7 +133,8 @@ class Bejeweled3WorldChampionships:
             score_pointer.update_address()
             previous_score = current_score
             current_score = get_score()
-            if not subchallenge.time_bonus_enabled and current_score < previous_score:
+            
+            if current_score < previous_score:
                 print("Challenge failed! (game over or reset detected)")
                 
                 if self.challenge.mode == "timed":
@@ -140,7 +143,7 @@ class Bejeweled3WorldChampionships:
                 
                 get_score = lambda: previous_score
                 break
-            elif subchallenge.time_bonus_enabled and current_score <= 0:
+            elif subchallenge.time_bonus_enabled and subchallenge_end_time <= time.time():
                 print("Challenge failed! (time ran out)")
                 
                 if self.challenge.mode == "timed":
@@ -148,6 +151,9 @@ class Bejeweled3WorldChampionships:
                     self.challenge_end_time -= 90
                     
                 break
+
+        if subchallenge.mode == "value" and subchallenge.time_bonus_enabled:
+            get_score = lambda: max(0, int((subchallenge_end_time - time.time()) * 1000))
 
         return get_score() - difference
     

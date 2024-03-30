@@ -5,6 +5,7 @@ from challenges import *
 import queue, hashlib
 from font import RenderFont
 from PIL import ImageTk
+from webbrowser import open as webopen
 
 def get_from_resources(filename: str):
     return str(pathlib.Path(PATH, "resources", filename))
@@ -12,7 +13,7 @@ def get_from_resources(filename: str):
 def insert_newlines(string, every): #thank you gurney alex (https://stackoverflow.com/questions/2657693/insert-a-newline-character-every-64-characters-using-python)
     return '-\n'.join(string[i:i+every] for i in range(0, len(string), every))
 
-def sha256sum(string_to_hash: str):
+def sha256_sum(string_to_hash: str):
     if type(string_to_hash) != str: string_to_hash = str(string_to_hash)
     return hashlib.sha256(string_to_hash.encode('utf-8')).hexdigest()
 
@@ -26,6 +27,7 @@ class GraphicalUserInterface:
         
         self.root = tk.Tk()
         self.size = tk.StringVar(value = "high") # Initialise GUI at "high" resolution
+        self.show_time_left = tk.BooleanVar(value = False)
         self.root.iconbitmap(get_from_resources("gem.ico"))
         self.root.resizable(False, False)
         
@@ -61,7 +63,7 @@ class GraphicalUserInterface:
                                   ][index],
                                  image = self.description_text)
         
-        hash_text = f"Challenge hash:\n{sha256sum(self.challenge.to_dict())}"
+        hash_text = f"Challenge hash:\n{sha256_sum(self.challenge.to_dict())}"
         self.challenge_hash_text = ImageTk.PhotoImage(self.font.get_render([7, 9, 12][index], hash_text, align = "mm"))
         self.canvas.create_image([(150, 470),
                                   (196, 601),
@@ -140,7 +142,7 @@ class GraphicalUserInterface:
         file_button["menu"] = menu_file
         file_button.place(x = 0, y = 0)
         
-        challenge_button = ttk.Menubutton(self.root, text = "About")
+        challenge_button = ttk.Menubutton(self.root, text = "Challenge")
         
         menu_challenge = tk.Menu(challenge_button, tearoff = False)
         menu_challenge.add_command(label = "Open",
@@ -152,8 +154,34 @@ class GraphicalUserInterface:
                                    underline = 0,
                                    state = "disabled")
         
-        # self.challenge_button.place(x = 60, y = 0)
-        # self.about_button.place(x = 150, y = 0)
+        menu_challenge.add_checkbutton(label = "Show time left",
+                                       underline = 0,
+                                       state = 'active',
+                                       variable = self.show_time_left,
+                                       onvalue = True,
+                                       offvalue = False)
+        
+        challenge_button["menu"] = menu_challenge
+        challenge_button.place(x = 60, y = 0)
+        
+        about_button = ttk.Menubutton(self.root, text = "About")
+        
+        menu_about = tk.Menu(about_button, tearoff = False)
+        menu_about.add_command(label = "Challenge",
+                               underline = 0)
+        menu_about.add_command(label = "Documentation",
+                               underline = 0,
+                               command = lambda: webopen('about:blank'), # need to rewrite that
+                               state = "disabled")
+        menu_about.add_command(label = "GitHub page",
+                               underline = 0,
+                               command = lambda: webopen("https://github.com/redstone59/Bejeweled3WorldChampionships"))
+        menu_about.add_command(label = "Find a bug?",
+                               underline = 7,
+                               command = lambda: webopen("https://github.com/redstone59/Bejeweled3WorldChampionships/issues"))
+        
+        about_button["menu"] = menu_about
+        about_button.place(x = 150, y = 0)
     
     def start(self):
         self.root.mainloop()

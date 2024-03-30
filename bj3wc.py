@@ -165,8 +165,11 @@ class Bejeweled3WorldChampionships:
         if self.challenge.mode == "timed":
             self.challenge_end_time = time.time() + self.challenge.time
         
+        self.scores = {}
+        
         self.subchallenge_loop()
         print("Time!")
+        
         add_and_display_scores(self.scores)
 
     def subchallenge_loop(self): 

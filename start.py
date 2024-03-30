@@ -30,6 +30,7 @@ while in_challenges:
         
         b.start()
         in_challenges = input("Play another challenge? (Y/N) ").lower().startswith("y")
+        
     except (InvalidChallengeError, InvalidSubchallengeError, FileNotFoundError) as e:
         print(f"{e.__class__}: {e}")
         print("Invalid challenge chosen!")

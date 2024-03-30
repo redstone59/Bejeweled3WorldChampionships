@@ -2,8 +2,6 @@
 # https://stackoverflow.com/questions/11993290/truly-custom-font-in-tkinter/73428832#73428832
 # Thanks to just_a_kid_coder_123 for this answer!
 
-# I don't know why VSCode hates this code so much.
-
 from PIL import Image, ImageFont, ImageDraw
 
 def hex_to_tuple(colour_code: str):

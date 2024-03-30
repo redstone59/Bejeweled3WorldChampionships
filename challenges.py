@@ -84,12 +84,25 @@ class Challenge:
     subchallenges: list[Subchallenge]
     time: int | None = None
     
+    def is_over(self):
+        return len(self.subchallenges) == 0
+    
     def next(self):
         if self.is_over(): return None
         return self.subchallenges.pop(0)
     
-    def is_over(self):
-        return len(self.subchallenges) == 0
+    def to_dict(self):
+        challenge_dict = {}
+        challenge_dict["challenge_information"] = {"name": self.name,
+                                                   "author": self.author,
+                                                   "description": self.description,
+                                                   "mode": self.mode,
+                                                   }
+        if self.mode == "timed": challenge_dict["challenge_information"]["time"] = self.time
+        
+        challenge_dict["subchallenges"] = [subchallenge.to_dict() for subchallenge in self.subchallenges]
+        
+        return challenge_dict
     
     def __str__(self):
         return f"""

@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from challenges import *
+from queue_items import *
 
 import queue, hashlib
 from font import RenderFont
@@ -32,12 +33,8 @@ class GraphicalUserInterface:
         self.size = tk.StringVar(value = "high") # Initialise GUI at "high" resolution
         self.show_time_left = tk.BooleanVar(value = False)
         self.index = 0
-        self.labels = {"scores": [],
-                       "challenges": [],
-                       "multipliers": [],
-                       "multiplied_scores": [],
-                       "metadata": []}
         
+        self.reset_labels()
         self.set_up_menu_bar()
         self.set_resolution()
     
@@ -46,8 +43,8 @@ class GraphicalUserInterface:
                          "high": (49, 190 + 46 * self.index),
                          "ultra": (76, 297 + 72 * self.index)
                          }[self.size.get()]
-        size = {"normal": 18,
-                "high": 21,
+        size = {"normal": 15,
+                "high": 19,
                 "ultra": 30
                 }[self.size.get()]
         
@@ -61,8 +58,8 @@ class GraphicalUserInterface:
                          "high": (49, 167 + 46 * self.index),
                          "ultra": (76, 261 + 72 * self.index)
                          }[self.size.get()]
-        size = {"normal": 18,
-                "high": 21,
+        size = {"normal": 15,
+                "high": 19,
                 "ultra": 30
                 }[self.size.get()]
         
@@ -70,8 +67,8 @@ class GraphicalUserInterface:
         self.canvas.create_image(text_position, image = self.labels["challenges"][-1])
     
     def add_multiplied_scores(self, scores: dict):
-        size = {"normal": 18,
-                "high": 21,
+        size = {"normal": 15,
+                "high": 19,
                 "ultra": 30
                 }[self.size.get()]
         
@@ -80,13 +77,13 @@ class GraphicalUserInterface:
         
         for key in scores:
             multiplier_position = {"normal": (262, 130 + 35 * self.index), # Estimated vertical offset
-                                "high": (336, 167 + 46 * self.index),
-                                "ultra": (526, 261 + 72 * self.index)
-                                }[self.size.get()]
+                                   "high": (336, 167 + 46 * self.index),
+                                   "ultra": (526, 261 + 72 * self.index)
+                                   }[self.size.get()]
             score_position = {"normal": (262, 148 + 35 * self.index), # Estimated vertical offset
-                            "high": (336, 190 + 46 * self.index),
-                            "ultra": (526, 297 + 72 * self.index)
-                            }[self.size.get()]
+                              "high": (336, 190 + 46 * self.index),
+                              "ultra": (526, 297 + 72 * self.index)
+                              }[self.size.get()]
             score = scores[key]
             
             self.labels["multipliers"] += [ImageTk.PhotoImage(self.font.get_render(size, f"x{score["multiplier"]:,}", colour = "#ffff60", align = "rs"))]
@@ -98,8 +95,8 @@ class GraphicalUserInterface:
             final_score += score["score"] * score["multiplier"]
             self.index += 1
         
-        final_score_position = {"normal": (150, 522),
-                                "high": (196, 709),
+        final_score_position = {"normal": (150, 555),
+                                "high": (196, 710),
                                 "ultra": (300, 1110),
                                 }[self.size.get()]
         size = {"normal": 30,
@@ -113,8 +110,8 @@ class GraphicalUserInterface:
     def add_metadata_text(self):
         if self.challenge == None: return
         
-        size = {"normal": 12,
-                "high": 14,
+        size = {"normal": 10,
+                "high": 13,
                 "ultra": 20
                 }[self.size.get()]
         index = ["normal", "high", "ultra"].index(self.size.get())
@@ -147,8 +144,16 @@ class GraphicalUserInterface:
                                   ][index],
                                  image = self.labels["metadata"][-1])
     
+    def check_queue(self):
+        while not self.gui_queue.empty():
+            action: QueueItem = self.gui_queue.get()
+            
+            match action.function:
+                case _:
+                    pass
+    
     def close(self):
-        # I know I could put the below into one if but that would be a long ass line of code.
+        # I know I could put the below into one if statement but that would be a long ass line of code.
         if self.challenge != None:
             if not messagebox.askyesno("Challenge in progress", "Are you sure you want to leave mid-challenge?"):
                 return
@@ -158,8 +163,31 @@ class GraphicalUserInterface:
 #       exit()
     
     def open_challenge_file(self):
-        file = filedialog.askopenfilename(parent = self.root, title = "Open challenge file", filetypes = [("JSON file", ".json")])
-        return file
+        while True:
+            challenge_file = filedialog.askopenfilename(parent = self.root, title = "Open challenge file", filetypes = [("JSON file", ".json")])
+            
+            try:
+                with open(challenge_file) as file:
+                    challenge = load_challenge_json(file.read())
+                
+                self.challenge = challenge
+                self.reset_labels()
+                self.add_metadata_text()
+                break
+                
+            except (InvalidChallengeError, InvalidSubchallengeError, FileNotFoundError) as e:
+                print(f"{e.__class__}: {e}")
+                messagebox.showerror("Uh oh!", f"Invalid challenge chosen!\n{e.__class__}: {e}")
+        
+        self.action_queue.put(QueueItem("open", challenge))
+        return challenge
+    
+    def reset_labels(self):
+        self.labels = {"scores": [],
+                       "challenges": [],
+                       "multipliers": [],
+                       "multiplied_scores": [],
+                       "metadata": []}
     
     def set_resolution(self):
         resolution = {"normal": "300x620",
@@ -205,7 +233,7 @@ class GraphicalUserInterface:
         menu_file = tk.Menu(file_button, tearoff = False)
         menu_file.add_command(label = "Open",
                               underline = 0,
-                              command = lambda: self.action_queue.put("open")
+                              command = lambda: self.open_challenge_file()
                               )
         
         submenu_resolution = tk.Menu(menu_file, tearoff = False)
@@ -236,7 +264,7 @@ class GraphicalUserInterface:
         menu_challenge = tk.Menu(challenge_button, tearoff = False)
         menu_challenge.add_command(label = "Open",
                                    underline = 0,
-                                   command = lambda: self.action_queue.put("open")
+                                   command = lambda: self.open_challenge_file()
                                    )
         
         menu_challenge.add_command(label = "Abort",
@@ -280,3 +308,20 @@ class GraphicalUserInterface:
     
     def start(self):
         self.root.mainloop()
+
+g = GraphicalUserInterface()
+
+c = Challenge("Challenge E", "redstone59", "Non-timed challenge included with BJ3WC", "timed", [], 40)
+g.challenge = c
+g.add_metadata_text()
+g.size.set("high")
+g.set_resolution()
+g.add_subchallenge_text("Lightning: 45s in tank")
+g.add_subchallenge_score(52350)
+g.add_subchallenge_text("Poker: 10 hands")
+g.add_subchallenge_score(185750)
+g.add_subchallenge_text("Match Bomb: 8 bombs (60s) [15]")
+g.add_subchallenge_score(56976)
+g.add_multiplied_scores({"a": {"multiplier": 1, "score": 52350}, "b": {"multiplier": 3, "score": 185750}, "c": {"multiplier": 5, "score": 56976}})
+
+g.start()

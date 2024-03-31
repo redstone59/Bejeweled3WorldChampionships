@@ -1,11 +1,11 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from challenges import *
 
 import queue, hashlib
 from font import RenderFont
 from PIL import ImageTk
-from webbrowser import open as webopen
+from webbrowser import open as web_open
 
 def get_from_resources(filename: str):
     return str(pathlib.Path(PATH, "resources", filename))
@@ -19,17 +19,18 @@ def sha256_sum(string_to_hash: str):
 
 class GraphicalUserInterface:
     def __init__(self):
-        self.challenge_callback = lambda: 1
         self.gui_queue = queue.Queue()     # Receives commands from BJ3WC (new challenges, scores, etc)
         self.action_queue = queue.Queue()  # Sends actions to BJ3WC (abort challenge, open new challenge, etc etc)
         self.font = RenderFont(get_from_resources("Flare Gothic Regular.ttf"))
         self.challenge: Challenge | None = None
         
         self.root = tk.Tk()
-        self.size = tk.StringVar(value = "high") # Initialise GUI at "high" resolution
-        self.show_time_left = tk.BooleanVar(value = False)
+        self.root.protocol("WM_DELETE_WINDOW", lambda: self.close())
         self.root.iconbitmap(get_from_resources("gem.ico"))
         self.root.resizable(False, False)
+        
+        self.size = tk.StringVar(value = "high") # Initialise GUI at "high" resolution
+        self.show_time_left = tk.BooleanVar(value = False)
         
         self.set_up_menu_bar()
         self.set_resolution()
@@ -70,6 +71,15 @@ class GraphicalUserInterface:
                                   (300, 940)
                                   ][index],
                                  image = self.challenge_hash_text)
+    
+    def close(self):
+        # I know I could put the below into one if but that would be a long ass line of code.
+        if self.challenge != None:
+            if not messagebox.askyesno("Challenge in progress", "Are you sure you want to leave mid-challenge?"):
+                return
+        
+        self.root.destroy()
+        exit()
     
     def set_resolution(self):
         resolution = {"normal": "300x620",
@@ -115,7 +125,7 @@ class GraphicalUserInterface:
         menu_file = tk.Menu(file_button, tearoff = False)
         menu_file.add_command(label = "Open",
                               underline = 0,
-                              command = lambda: self.challenge_callback()
+                              command = lambda: self.action_queue.put("open")
                               )
         
         submenu_resolution = tk.Menu(menu_file, tearoff = False)
@@ -137,7 +147,7 @@ class GraphicalUserInterface:
                                            )
         
         menu_file.add_cascade(label = "Resolution", menu = submenu_resolution)
-        menu_file.add_command(label = "Exit", underline = 0, command = lambda: exit())
+        menu_file.add_command(label = "Exit", underline = 0, command = lambda: self.close())
         
         file_button["menu"] = menu_file
         file_button.place(x = 0, y = 0)
@@ -147,7 +157,7 @@ class GraphicalUserInterface:
         menu_challenge = tk.Menu(challenge_button, tearoff = False)
         menu_challenge.add_command(label = "Open",
                                    underline = 0,
-                                   command = lambda: self.challenge_callback()
+                                   command = lambda: self.action_queue.put("open")
                                    )
         
         menu_challenge.add_command(label = "Abort",
@@ -171,14 +181,14 @@ class GraphicalUserInterface:
                                underline = 0)
         menu_about.add_command(label = "Documentation",
                                underline = 0,
-                               command = lambda: webopen('about:blank'), # need to rewrite that
+                               command = lambda: web_open('about:blank'), # need to rewrite that
                                state = "disabled")
         menu_about.add_command(label = "GitHub page",
                                underline = 0,
-                               command = lambda: webopen("https://github.com/redstone59/Bejeweled3WorldChampionships"))
+                               command = lambda: web_open("https://github.com/redstone59/Bejeweled3WorldChampionships"))
         menu_about.add_command(label = "Find a bug?",
                                underline = 7,
-                               command = lambda: webopen("https://github.com/redstone59/Bejeweled3WorldChampionships/issues"))
+                               command = lambda: web_open("https://github.com/redstone59/Bejeweled3WorldChampionships/issues"))
         
         about_button["menu"] = menu_about
         about_button.place(x = 150, y = 0)
@@ -188,8 +198,7 @@ class GraphicalUserInterface:
 
 g = GraphicalUserInterface()
 
-g.challenge_callback = lambda: print("open challenge button")
-c = Challenge("impossible challenge xviii", "Matthew :D", "impossible challenge, boo piper could never", "timed", [], 40)
+c = Challenge("impossible challenge xviii", "Matthew :D", "impossible challenge, number 1 most impossible...", "timed", [], 40)
 g.challenge = c
 g.add_metadata_text()
 

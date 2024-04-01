@@ -90,14 +90,16 @@ class Bejeweled3WorldChampionships:
                     if self.challenge.mode == "timed":
                         print(f"{self.penalty} second penalty!")
                         self.challenge_end_time -= self.penalty
-                    
-                    get_score = lambda: int(subchallenge_end_time - time.time()) * 1000
+
                     break
             
             elif self.is_challenge_time_up():
                 if len(self.challenge.subchallenges) != 0:
                     self.fail_type = "challenge end"
                 break
+
+        if subchallenge.time_bonus_enabled:
+            get_score = lambda: int(subchallenge_end_time - time.time()) * 1000
 
         return max(0, get_score())
              

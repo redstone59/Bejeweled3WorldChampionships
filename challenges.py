@@ -52,20 +52,25 @@ class Subchallenge:
         
         return initial_value
     
-    def __str__(self):
-        subchallenge_data = CHALLENGE_DATA[self.objective]
+    def get_string(self, key: Literal["expanded", "abbreviated"]):
+        if key not in ["expanded", "abbreviated"]:
+            raise ValueError(f"Invalid key {key}. Key should be 'expanded' or 'abbreviated'.")
+        
+        subchallenge_strings: dict = CHALLENGE_DATA[self.objective]["strings"]
+        if "suffix" in subchallenge_strings.keys(): suffix = subchallenge_strings["suffix"]
+        subchallenge_strings = subchallenge_strings[key]
         
         if self.mode == "value":
-            result_string: str = subchallenge_data["description_string"]
+            result_string: str = subchallenge_strings["value"]
             result_string = result_string.replace("<condition>", str(self.condition))
             if self.time_bonus_enabled:
                 result_string += "\b as quickly as possible!" # This smells bad.
         elif self.mode == "endless":
-            result_string: str = subchallenge_data["timed_string"]
+            result_string: str = subchallenge_strings["timed"]
             result_string = result_string.replace("<suffix>", "until the challenge ends")
         else:
-            result_string: str = subchallenge_data["timed_string"]
-            result_string = result_string.replace("<suffix>", subchallenge_data["time_suffix"])
+            result_string: str = subchallenge_strings["timed"]
+            result_string = result_string.replace("<suffix>", suffix)
             result_string = result_string.replace("<time>", str(self.time))
         
         if self.objective == "PokerHand" and self.condition >= 2:
@@ -74,6 +79,12 @@ class Subchallenge:
             result_string = result_string.replace("<extra>", str(self.extra))
         
         return result_string
+    
+    def get_gui_string(self):
+        return self.get_string('abbreviated')
+    
+    def __str__(self):
+        return self.get_string('expanded')
 
 @dataclass
 class Challenge:

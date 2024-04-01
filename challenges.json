@@ -2,434 +2,688 @@
     "Cascade": {
         "allowed_modes": ["value"],
         "pointer_offsets": ["0xbe0", "0x2444"],
-        "description_string": "All (but Diamond Mine and Quests): Get a cascade of <condition>!",
-        "abbreviated_string": ["Any:", ""],
         "requirements": {
             "board_types": [],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "All (but Diamond Mine and Quests): Get a cascade of <condition>!"
+            },
+            "abbreviated": {
+                "value": "Any: Cascade of <condition>"
+            }
         }
     },
     "Classic": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xd20"],
-        "description_string": "Classic: Score <condition> points!",
-        "timed_string": "Classic: Score as many points as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["CLASSIC_BOARD"],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "Classic: Score <condition> points!",
+                "timed": "Classic: Score as many points as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Classic: <condition> points",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "Zen": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xd20"],
-        "description_string": "Zen: Score <condition> points!",
-        "timed_string": "Zen: Score as many points as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["ZEN_BOARD"],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "Zen: Score <condition> points!",
+                "timed": "Zen: Score as many points as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Zen: <condition> points",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "Lightning": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xd20"],
-        "description_string": "Lightning: Score <condition> points!",
-        "timed_string": "Lightning: Score as many points as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["SPEED_BOARD"],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "Lightning: Score <condition> points!",
+                "timed": "Lightning: Score as many points as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Lightning: <condition> points",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "Poker": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xd20"],
-        "description_string": "Poker: Score <condition> points!",
-        "timed_string": "Poker: Score as many points as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["POKER_BOARD"],
             "quest_ids": [1000]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Poker: Score <condition> points!",
+                "timed": "Poker: Score as many points as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Poker: <condition> points",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "Butterflies": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xd20"],
-        "description_string": "Butterfiles: Score <condition> points!",
-        "timed_string": "Butterflies: Score as many points as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["BUTTERFLY_BOARD"],
             "quest_ids": [1001]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Butterfiles: Score <condition> points!",
+                "timed": "Butterflies: Score as many points as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Butterflies: <condition> points",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "IceStorm": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xd20"],
-        "description_string": "Ice Storm: Score <condition> points!",
-        "timed_string": "Ice Storm: Score as many points as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["NO_LOSE_BOARD"],
             "quest_ids": [1002]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Ice Storm: Score <condition> points!",
+                "timed": "Ice Storm: Score as many points as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Ice Storm: <condition> points",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "DiamondMine": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "description_string": "Diamond Mine: Score <condition> points!",
-        "timed_string": "Diamond Mine: Score as many points as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
+        "abbreviated_string": "Diamond Mine: <condition> points",
         "requirements": {
             "board_types": ["DIG_BOARD"],
             "quest_ids": [1003]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Diamond Mine: Score <condition> points!",
+                "timed": "Diamond Mine: Score as many points as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "ClasLevel": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xe04"],
-        "description_string": "Classic: Get to level <condition>!",
-        "timed_string": "Classic: Complete as many levels as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["CLASSIC_BOARD"],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "Classic: Get to level <condition>!",
+                "timed": "Classic: Complete as many levels as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Classic: Level <condition>",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "ZenLevel": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xe04"],
-        "description_string": "Zen: Get to level <condition>!",
-        "timed_string": "Zen: Complete as many levels as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["ZEN_BOARD"],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "Zen: Get to level <condition>!",
+                "timed": "Zen: Complete as many levels as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Zen: Level <condition>",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "LightMult": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xe0c"],
-        "description_string": "Lightning: Get a multiplier of <condition>!",
-        "timed_string": "Lightning: Get the highest multiplier you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["SPEED_BOARD"],
             "quest_ids": [],
             "initial_value": 1
+        },
+        "strings": {
+            "expanded": {
+                "value": "Lightning: Get a multiplier of <condition>!",
+                "timed": "Lightning: Get the highest multiplier you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Lightning: Multiplier of <condition>",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "LightTime": {
         "allowed_modes": ["value", "timed"],
         "pointer_offsets": ["0xbe0", "0x30a4"],
-        "description_string": "Lightning: Get <condition> seconds in the Time Extension Tank!",
-        "timed_string": "Lightning: Fill the Time Extension Tank as high as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["SPEED_BOARD"],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "Lightning: Get <condition> seconds in the Time Extension Tank!",
+                "timed": "Lightning: Fill the Time Extension Tank as high as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Lightning: <condition>s in tank",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "LightBlaze": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0x1188"],
-        "description_string": "Lightning: Get <condition> Blazing Speeds!",
-        "timed_string": "Lightning: Get as many Blazing Speeds as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["SPEED_BOARD"],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "Lightning: Get <condition> Blazing Speeds!",
+                "timed": "Lightning: Get as many Blazing Speeds as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Lightning: <condition> Blazings",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "QuestCompleted": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0"],
-        "description_string": "Quest: Complete <condition> Quests!",
-        "timed_string": "Quest: Complete as many Quests as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": [],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "Quest: Complete <condition> Quests!",
+                "timed": "Quest: Complete as many Quests as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Quest: <condition> Quests",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "PokerLimit": {
         "allowed_modes": ["value"],
         "pointer_offsets": ["0xbe0", "0x3960"],
-        "description_string": "Poker: Get the best score you can in <condition> hands!",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["POKER_BOARD"],
             "quest_ids": [1000]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Poker: Get the best score you can in <condition> hands!"
+            },
+            "abbreviated": {
+                "value": "Poker: <condition> hands"
+            }
         }
     },
     "PokerHand": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0x39d8"],
-        "description_string": "Poker: Get <condition> <extra>!",
-        "timed_string": "Poker: Get as many <extra>s as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["POKER_BOARD"],
             "quest_ids": [1000]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Poker: Get <condition> <extra>!",
+                "timed": "Poker: Get as many <extra>s as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Poker: <condition> <extra>",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "PokerSkull": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0x3964"],
-        "description_string": "Poker: Bust <condition> skulls!",
-        "timed_string": "Poker: Bust as many skulls as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["POKER_BOARD"],
             "quest_ids": [1000]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Poker: Bust <condition> skulls!",
+                "timed": "Poker: Bust as many skulls as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Poker: <condition> skulls",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "ButterClear": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xcf0"],
-        "description_string": "Butterflies: Clear <condition> butterflies!",
-        "timed_string": "Butterflies: Clear as many butterflies as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["BUTTERFLY_BOARD"],
             "quest_ids": [1001]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Butterflies: Clear <condition> butterflies!",
+                "timed": "Butterflies: Clear as many butterflies as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Butterflies: <condition> butterflies",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "ButterCombo": {
         "allowed_modes": ["value", "timed"],
         "pointer_offsets": ["0xbe0", "0xcf4"],
-        "description_string": "Butterflies: Get a combo of <condition>!",
-        "timed_string": "Butterflies: Get the highest combo you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["BUTTERFLY_BOARD"],
             "quest_ids": [1001]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Butterflies: Get a combo of <condition>!",
+                "timed": "Butterflies: Get the highest combo you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Butterflies: Combo of <condition>",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "IceColumn": {
         "allowed_modes": ["value", "timed"],
         "pointer_offsets": ["0xbe0", "0xcd0"],
-        "description_string": "Ice Storm: Break <condition> columns!",
-        "timed_string": "Ice Storm: Break as many columns as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["BUTTERFLY_BOARD"],
             "quest_ids": [1001]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Ice Storm: Break <condition> columns!",
+                "timed": "Ice Storm: Break as many columns as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Ice Storm: <condition> columns",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "IceCombo": {
         "allowed_modes": ["value", "timed"],
         "pointer_offsets": ["0xbe0", "0x36B8"],
-        "description_string": "Ice Storm: Get to a column combo of <condition>!",
-        "timed_string": "Ice Storm: Get the highest column combo you <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["NO_LOSE_BOARD"],
             "quest_ids": [1002]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Ice Storm: Get to a column combo of <condition>!",
+                "timed": "Ice Storm: Get the highest column combo you <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Ice Storm: Combo of <condition>",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     },
     "DiamondDepth": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0x31f0", "0x4f0"],
-        "description_string": "Diamond Mine: Get to a depth of <condition> metres!",
-        "timed_string": "Diamond Mine: Get as deep as you can <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["DIG_BOARD"],
             "quest_ids": [1003]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Diamond Mine: Get to a depth of <condition> metres!",
+                "timed": "Diamond Mine: Get as deep as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Diamond Mine: Dig <condition>m",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     },
     "DiamondTreasure": {
         "allowed_modes": ["value", "timed"],
         "pointer_offsets": ["0xbe0"],
-        "description_string": "Diamond Mine: Get <condition> treasures!",
-        "timed_string": "Diamond Mine: Get as many treasures as you can <suffix>!",
-        "time_suffix": "in <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["DIG_BOARD"],
             "quest_ids": [1003]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Diamond Mine: Get <condition> treasures!",
+                "timed": "Diamond Mine: Get as many treasures as you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Diamond Mine: <condition> treasures",
+                "timed": ""
+            },
+            "suffix": "in <time> seconds"
         }
     },
     "Balance": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "description_string": "Balance: Balance <condition> gems!",
-        "timed_string": "Balance: Match as many red and blue gems you can <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["BALANCE_BOARD"],
             "quest_ids": [4, 13, 30, 32]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Balance: Balance <condition> gems!",
+                "timed": "Balance: Match as many red and blue gems you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Balance: <condition> gems",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     },
     "Stratamax": {
         "allowed_modes": ["value"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "description_string": "Stratamax: Clear as many gems as you can in <condition> moves!",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["MOVE_LIMIT_BOARD"],
             "quest_ids": [3, 10, 22, 31, 34]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Stratamax: Clear as many gems as you can in <condition> moves!"
+            },
+            "abbreviated": {
+                "value": "Stratamax: <condition> moves"
+            }
         }
     },
     "GoldRush": {
         "allowed_modes": ["value"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "description_string": "Gold Rush: Mine <condition> gold!",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["DIG_BOARD"],
             "quest_ids": [1, 21, 24, 36]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Gold Rush: Mine <condition> gold!"
+            },
+            "abbreviated": {
+                "value": "Gold Rush: <condition> gold"
+            }
         }
     },
     "Alchemy": {
         "allowed_modes": ["value", "timed"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "description_string": "Alchemy: Turn <condition> squares to gold!",
-        "timed_string": "Alchemy: Turn as many squares into gold <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["TIME_LIMIT_BOARD", "MOVE_LIMIT_BOARD"],
             "quest_ids": [2, 16, 26]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Alchemy: Turn <condition> squares to gold!",
+                "timed": "Alchemy: Turn as many squares into gold <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Alchemy: <condition> squares",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     },
     "TimeBomb": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "description_string": "Time Bomb: Eliminate <condition> bombs!",
-        "timed_string": "Time Bomb: Eliminate as many bombs you can <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["REAL_TIME_BOMB_BOARD", "TIME_BOMB_BOARD"],
             "quest_ids": [14, 29]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Time Bomb: Eliminate <condition> bombs!",
+                "timed": "Time Bomb: Eliminate as many bombs you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Time Bomb: <condition> bombs",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     },
     "MatchBomb": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "description_string": "Match Bomb: Eliminate <condition> bombs!",
-        "timed_string": "Match Bomb: Eliminate as many bombs you can <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["REAL_TIME_BOMB_BOARD", "TIME_BOMB_BOARD"],
             "quest_ids": [7, 23]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Match Bomb: Eliminate <condition> bombs!",
+                "timed": "Match Bomb: Eliminate as many bombs you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Match Bomb: <condition> bombs",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     },
     "Avalanche": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "description_string": "Avalanche: Clear <condition> gems!",
-        "timed_string": "Avalanche: Clear as many gems you can <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["FILLER_BOARD"],
             "quest_ids": [5, 15, 20, 27, 38]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Avalanche: Clear <condition> gems!",
+                "timed": "Avalanche: Clear as many gems you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Avalanche: <condition> gems",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     },
     "WallBlast": {
         "allowed_modes": ["value", "timed"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "description_string": "Wall Blast: Destroy <condition> wall tiles!",
-        "timed_string": "Wall Blast: Destroy as many wall tiles you can <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["TIME_LIMIT_BOARD"],
             "quest_ids": [17, 35]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Wall Blast: Destroy <condition> wall tiles!",
+                "timed": "Wall Blast: Destroy as many wall tiles you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Wall Blast: <condition> tiles",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     },
     "Treasure": {
         "allowed_modes": ["value"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "description_string": "Buried Treasure: Uncover <condition> treasures!",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["TIME_LIMIT_BOARD"],
             "quest_ids": [6]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Buried Treasure: Uncover <condition> treasures!"
+            },
+            "abbreviated": {
+                "value": "Buried Treasure: <condition> treasures"
+            }
         }
     },
     "Sand": {
         "allowed_modes": ["value"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "description_string": "Sandstorm: Uncover <condition> fossil fragments!",
-        "abbreviated_string": ["", ""],
         "requirements": {
             "board_types": ["TIME_LIMIT_BOARD"],
             "quest_ids": [11, 33]
+        },
+        "strings": {
+            "expanded": {
+                "value": "Sandstorm: Uncover <condition> fossil fragments!"
+            },
+            "abbreviated": {
+                "value": "Sandstorm: <condition> fragments"
+            }
         }
     },
     "Blaster": {
         "allowed_modes": ["value", "timed"],
         "pointer_offsets": ["0xbe0", "0x22e8"],
-        "description_string": "All (but Diamond Mine and Quests): Clear <condition> gems in one move!",
-        "timed_string": "All (but Diamond Mine and Quests): Clear the most gems in one move <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["Any:", ""],
         "requirements": {
             "board_types": [],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "All (but Diamond Mine and Quests): Clear <condition> gems in one move!",
+                "timed": "All (but Diamond Mine and Quests): Clear the most gems in one move <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Any: <condition> gems in one move",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     },
     "Inferno": {
         "allowed_modes": ["value", "timed"],
         "pointer_offsets": ["0xbe0", "0xcb0"],
-        "description_string": "All (but Diamond Mine and Quests): Detonate <condition> Flame Gems!",
-        "timed_string": "All (but Diamond Mine and Quests): Detonate as many Flame Gems you can <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["Any:", ""],
         "requirements": {
             "board_types": [],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "All (but Diamond Mine and Quests): Detonate <condition> Flame Gems!",
+                "timed": "All (but Diamond Mine and Quests): Detonate as many Flame Gems you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Any: <condition> Flame Gems",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     },
     "Stellar": {
         "allowed_modes": ["value", "timed"],
         "pointer_offsets": ["0xbe0", "0xcb4"],
-        "description_string": "All (but Diamond Mine and Quests): Detonate <condition> Star Gems!",
-        "timed_string": "All (but Diamond Mine and Quests): Detonate as many Star Gems you can <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["Any:", ""],
         "requirements": {
             "board_types": [],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "All (but Diamond Mine and Quests): Detonate <condition> Star Gems!",
+                "timed": "All (but Diamond Mine and Quests): Detonate as many Star Gems you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Any: <condition> Star Gems",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     },
     "Chromatic": {
         "allowed_modes": ["value", "timed"],
         "pointer_offsets": ["0xbe0", "0xcb8"],
-        "description_string": "All (but Diamond Mine and Quests): Detonate <condition> Hypercubes!",
-        "timed_string": "All (but Diamond Mine and Quests): Detonate as many Hypercubes you can <suffix>!",
-        "time_suffix": "within <time> seconds",
-        "abbreviated_string": ["Any:", ""],
         "requirements": {
             "board_types": [],
             "quest_ids": []
+        },
+        "strings": {
+            "expanded": {
+                "value": "All (but Diamond Mine and Quests): Detonate <condition> Hypercubes!",
+                "timed": "All (but Diamond Mine and Quests): Detonate as many Hypercubes you can <suffix>!"
+            },
+            "abbreviated": {
+                "value": "Any: <condition> Hypercubes",
+                "timed": ""
+            },
+            "suffix": "within <time> seconds"
         }
     }
 }

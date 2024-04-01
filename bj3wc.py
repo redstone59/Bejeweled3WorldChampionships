@@ -207,6 +207,7 @@ class Bejeweled3WorldChampionships:
             self.wait_until_open(subchallenge)
             if self.challenge.mode == "timed":
                 self.challenge_end_time += time.time() - dordle_time
+                self.gui_queue.put(QueueItem("new_end_time", self.challenge_end_time))
             
             print("Go!")
             

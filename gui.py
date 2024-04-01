@@ -3,7 +3,7 @@ from tkinter import ttk, filedialog, messagebox
 from challenges import *
 from queue_items import *
 
-import queue, hashlib
+import queue, hashlib, time
 from font import RenderFont
 from PIL import ImageTk
 from webbrowser import open as web_open
@@ -174,13 +174,19 @@ class GraphicalUserInterface:
             match action.function:
                 case "challenge_end":
                     self.add_multiplied_scores(action.arguments[0])
+                    self.challenge = None
+                    self.update_menu_states(False)
                 case "score":
                     self.add_subchallenge_score(action.arguments[0])
                 case "subchallenge":
                     self.add_subchallenge_text(*action.arguments)
+                case "new_end_time":
+                    self.challenge_end_time = action.arguments[0]
+                    self.update_time_display()
             
             self.root.update()
         
+        self.update_time_display()
         self.root.after(100, self.check_queue)
     
     def close(self):
@@ -204,6 +210,10 @@ class GraphicalUserInterface:
                 self.challenge = challenge
                 self.reset_labels()
                 self.add_metadata_text()
+                
+                if self.challenge.mode == "timed":
+                    self.challenge_end_time = time.time() + self.challenge.time
+                
                 break
                 
             except (InvalidChallengeError, InvalidSubchallengeError, FileNotFoundError) as e:
@@ -212,6 +222,7 @@ class GraphicalUserInterface:
 
         self.action_queue.put(QueueItem("open", challenge))
         self.action_queue.put(QueueItem("start", ()))
+        self.update_menu_states(True)
         return challenge
     
     def reset_labels(self):
@@ -219,7 +230,9 @@ class GraphicalUserInterface:
                        "challenges": [],
                        "multipliers": [],
                        "multiplied_scores": [],
-                       "metadata": []}
+                       "metadata": [],
+                       "timer": tk.Label(self.root, text = "0:00", font = ("Arial", 10))
+                       }
     
     def set_resolution(self):
         resolution = {"normal": "300x620",
@@ -235,6 +248,7 @@ class GraphicalUserInterface:
         
         self.set_up_canvas(self.size.get())
         self.add_metadata_text()
+        self.toggle_time_display()
         
     def set_up_canvas(self, size: str):
         self.background_image = tk.PhotoImage(file = get_from_resources(f"background_{size}.png"))
@@ -262,13 +276,13 @@ class GraphicalUserInterface:
     def set_up_menu_bar(self):
         file_button = ttk.Menubutton(self.root, text = "File")
         
-        menu_file = tk.Menu(file_button, tearoff = False)
-        menu_file.add_command(label = "Open",
-                              underline = 0,
-                              command = lambda: self.open_challenge_file()
-                              )
+        self.menu_file = tk.Menu(file_button, tearoff = False)
+        self.menu_file.add_command(label = "Open",
+                                   underline = 0,
+                                   command = lambda: self.open_challenge_file()
+                                   )
         
-        submenu_resolution = tk.Menu(menu_file, tearoff = False)
+        submenu_resolution = tk.Menu(self.menu_file, tearoff = False)
         submenu_resolution.add_radiobutton(label = 'Normal (300x600)',
                                            value = "normal",
                                            variable = self.size,
@@ -285,34 +299,35 @@ class GraphicalUserInterface:
                                            command = self.set_resolution
                                            )
         
-        menu_file.add_cascade(label = "Resolution", menu = submenu_resolution)
-        menu_file.add_command(label = "Exit", underline = 0, command = lambda: self.close())
+        self.menu_file.add_cascade(label = "Resolution", menu = submenu_resolution)
+        self.menu_file.add_command(label = "Exit", underline = 0, command = lambda: self.close())
         
-        file_button["menu"] = menu_file
+        file_button["menu"] = self.menu_file
         file_button.place(x = 0, y = 0)
         
         challenge_button = ttk.Menubutton(self.root, text = "Challenge")
         
-        menu_challenge = tk.Menu(challenge_button, tearoff = False)
-        menu_challenge.add_command(label = "Open",
-                                   underline = 0,
-                                   command = lambda: self.open_challenge_file()
-                                   )
+        self.menu_challenge = tk.Menu(challenge_button, tearoff = False)
+        self.menu_challenge.add_command(label = "Open",
+                                        underline = 0,
+                                        command = lambda: self.open_challenge_file()
+                                        )
         
-        menu_challenge.add_command(label = "Abort",
-                                   underline = 0,
-                                   state = "disabled"
-                                   )
+        self.menu_challenge.add_command(label = "Abort",
+                                        underline = 0,
+                                        state = "disabled"
+                                        )
         
-        menu_challenge.add_checkbutton(label = "Show time left",
-                                       underline = 0,
-                                       state = 'active',
-                                       variable = self.show_time_left,
-                                       onvalue = True,
-                                       offvalue = False
-                                       )
+        self.menu_challenge.add_checkbutton(label = "Show time left",
+                                            underline = 0,
+                                            state = 'active',
+                                            variable = self.show_time_left,
+                                            onvalue = True,
+                                            offvalue = False,
+                                            command = self.toggle_time_display
+                                            )
         
-        challenge_button["menu"] = menu_challenge
+        challenge_button["menu"] = self.menu_challenge
         challenge_button.place(x = 60, y = 0)
         
         about_button = ttk.Menubutton(self.root, text = "About")
@@ -341,3 +356,40 @@ class GraphicalUserInterface:
     def start(self):
         self.root.after(0, self.check_queue)
         self.root.mainloop()
+    
+    def toggle_time_display(self):
+        if self.show_time_left.get():
+            label_x = {"normal": 300,
+                              "high": 384,
+                              "ultra": 600
+                              }[self.size.get()]
+            self.labels["timer"].place(x = label_x, y = 11, anchor = tk.E)
+        else:
+            self.labels["timer"].place_forget()
+    
+    def update_menu_states(self, in_challenge: bool):
+        disabled = lambda on: "active" if not on else "disabled"
+        self.menu_file.entryconfigure("Resolution", state = disabled(in_challenge))
+        self.menu_file.entryconfigure("Open", state = disabled(in_challenge))
+        self.menu_challenge.entryconfigure("Abort", state = disabled(not in_challenge))
+        self.menu_challenge.entryconfigure("Open", state = disabled(in_challenge))
+        self.menu_challenge.entryconfigure("Show time left", state = disabled(in_challenge))
+    
+    def update_time_display(self):
+        if not self.show_time_left.get(): return
+        
+        if self.challenge == None:
+            self.labels["timer"]["text"] = "0:00"
+        
+        if self.challenge.mode == "marathon":
+            self.labels["timer"]["text"] = "Marathon"
+        
+        else:
+            remaining_time = int(self.challenge_end_time - time.time())
+            remaining_seconds = remaining_time % 60
+            remaining_minutes = remaining_time // 60
+            
+            if remaining_seconds >= 10:
+                self.labels["timer"]["text"] = f"{remaining_minutes}:{remaining_seconds}"
+            else:
+                self.labels["timer"]["text"] = f"{remaining_minutes}:0{remaining_seconds}"

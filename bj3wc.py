@@ -214,8 +214,10 @@ class Bejeweled3WorldChampionships:
                 self.gui_queue.put(QueueItem("new_end_time", self.challenge_end_time))
             
             print("Go!")
+            self.fail_type = None
             
             final_score = self.do_subchallenge(subchallenge)
+            
             if self.fail_type != None:
                 self.gui_queue.put(QueueItem("score", final_score, self.fail_type))
             else:

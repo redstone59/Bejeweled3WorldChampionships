@@ -236,6 +236,7 @@ class GraphicalUserInterface:
                 messagebox.showerror("Uh oh!", f"Invalid challenge chosen!\n{e.__class__}: {e}")
                 return
 
+        self.index = 0
         self.action_queue.put(QueueItem("open", challenge))
         self.action_queue.put(QueueItem("start", ()))
         self.update_menu_states(True)
@@ -371,7 +372,7 @@ class GraphicalUserInterface:
         about_button.place(x = 150, y = 0)
     
     def start(self):
-        self.root.after(0, self.check_queue)
+        self.root.after(1000, self.check_queue)
         self.root.mainloop()
     
     def toggle_time_display(self):

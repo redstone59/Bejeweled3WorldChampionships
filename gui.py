@@ -381,7 +381,7 @@ class GraphicalUserInterface:
         if self.challenge == None:
             self.labels["timer"]["text"] = "0:00"
         
-        if self.challenge.mode == "marathon":
+        elif self.challenge.mode == "marathon":
             self.labels["timer"]["text"] = "Marathon"
         
         else:

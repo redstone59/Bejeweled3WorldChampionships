@@ -62,7 +62,7 @@ class Subchallenge:
                 result_string += f" ({self.time}s)"
         elif self.mode == "endless":
             result_string: str = subchallenge_strings["timed"]
-            result_string = result_string.replace("<suffix>", "until the challenge ends")
+            result_string += " (endless)"
         else:
             result_string: str = subchallenge_strings["timed"]
             result_string += f" ({self.time}s)"
@@ -83,7 +83,8 @@ class Subchallenge:
             result_string: str = subchallenge_strings["value"]
             result_string = result_string.replace("<condition>", str(self.condition))
             if self.time_bonus_enabled:
-                result_string += "\b as quickly as possible!" # This smells bad.
+                result_string = result_string[:-1] # This smells bad.
+                result_string += " as quickly as possible!"
         elif self.mode == "endless":
             result_string: str = subchallenge_strings["timed"]
             result_string = result_string.replace("<suffix>", "until the challenge ends")

@@ -16,6 +16,7 @@ class Bejeweled3WorldChampionships:
         self.challenge_end_time = 0
         self.penalty = 120
         self.scores = {}
+        self.fail_type = None
     
     def add_subchallenge_extra(self, subchallenge: Subchallenge):
         if subchallenge.objective in ["Avalanche", "Butterflies", "ButterClear", "ButterCombo", "MatchBomb", "TimeBomb"]:
@@ -72,6 +73,7 @@ class Bejeweled3WorldChampionships:
             
             if current_score < previous_score:
                 print("Challenge failed! (game over or reset detected)")
+                self.fail_type = "reset"
                 
                 if self.challenge.mode == "timed":
                     print(f"{self.penalty} second penalty!")
@@ -83,6 +85,7 @@ class Bejeweled3WorldChampionships:
             elif subchallenge.time_bonus_enabled:
                 if subchallenge_end_time <= time.time():
                     print("Challenge failed! (time ran out)")
+                    self.fail_type = "time out"
                     
                     if self.challenge.mode == "timed":
                         print(f"{self.penalty} second penalty!")
@@ -165,6 +168,7 @@ class Bejeweled3WorldChampionships:
         running = True
         
         self.game = BejeweledThreeProcess() # Fixes worlds strangest bug (pointers dont read if the game isnt found inside of the process)
+        self.gui_queue.put(QueueItem("game_opened"))
         
         while running:
             if self.action_queue.empty(): continue
@@ -212,7 +216,10 @@ class Bejeweled3WorldChampionships:
             print("Go!")
             
             final_score = self.do_subchallenge(subchallenge)
-            self.gui_queue.put(QueueItem("score", final_score))
+            if self.fail_type != None:
+                self.gui_queue.put(QueueItem("score", final_score, self.fail_type))
+            else:
+                self.gui_queue.put(QueueItem("score", final_score))
             
             self.scores[subchallenge.objective] = {"multiplier": subchallenge.multiplier, "score": final_score}
     

@@ -33,12 +33,13 @@ class GraphicalUserInterface:
         self.size = tk.StringVar(value = "high") # Initialise GUI at "high" resolution
         self.show_time_left = tk.BooleanVar(value = False)
         self.index = 0
+        self.pester_about_game = True
         
         self.reset_labels()
         self.set_up_menu_bar()
         self.set_resolution()
     
-    def add_subchallenge_score(self, score: int):
+    def add_subchallenge_score(self, score: int, fail_type = ""):
         text_position = {"normal": (38, 148 + 35 * self.index), # Estimated vertical offset
                          "high": (49, 190 + 46 * self.index),
                          "ultra": (76, 297 + 72 * self.index)
@@ -48,7 +49,11 @@ class GraphicalUserInterface:
                 "ultra": 30
                 }[self.size.get()]
         
-        self.labels["scores"] += [ImageTk.PhotoImage(self.font.get_render(size, f"{score:,}", colour = "#f4f4d0", align = "ls"))]
+        score_string = f"{score:,}"
+        if fail_type != "":
+            score_string += f" ({fail_type})"
+        
+        self.labels["scores"] += [ImageTk.PhotoImage(self.font.get_render(size, score_string, colour = "#f4f4d0", align = "ls"))]
         self.canvas.create_image(text_position, image = self.labels["scores"][-1], tags = "game")
         
         self.index += 1
@@ -176,8 +181,10 @@ class GraphicalUserInterface:
                     self.add_multiplied_scores(action.arguments[0])
                     self.challenge = None
                     self.update_menu_states(False)
+                case "game_opened":
+                    self.pester_about_game = False
                 case "score":
-                    self.add_subchallenge_score(action.arguments[0])
+                    self.add_subchallenge_score(*action.arguments)
                 case "subchallenge":
                     self.add_subchallenge_text(*action.arguments)
                 case "new_end_time":
@@ -185,6 +192,14 @@ class GraphicalUserInterface:
                     self.update_time_display()
             
             self.root.update()
+        
+        if self.pester_about_game:
+            clicked_retry = messagebox.showerror("Uh oh!",
+                                                 "Bejeweled 3 not detected! Please open the game and press Retry, otherwise hit Cancel to close the program.",
+                                                 type = messagebox.RETRYCANCEL
+                                                 ) == "retry"
+            if not clicked_retry:
+                self.close()
         
         self.update_time_display()
         self.root.after(100, self.check_queue)
@@ -219,10 +234,12 @@ class GraphicalUserInterface:
             except (InvalidChallengeError, InvalidSubchallengeError, FileNotFoundError) as e:
                 print(f"{e.__class__}: {e}")
                 messagebox.showerror("Uh oh!", f"Invalid challenge chosen!\n{e.__class__}: {e}")
+                return
 
         self.action_queue.put(QueueItem("open", challenge))
         self.action_queue.put(QueueItem("start", ()))
         self.update_menu_states(True)
+        self.toggle_time_display()
         return challenge
     
     def reset_labels(self):

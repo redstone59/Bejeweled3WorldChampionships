@@ -20,12 +20,6 @@ def main():
         
         gui.start()
         
-        while True:
-            try:
-                gui.root.winfo_exists()
-            except:
-                break
-        
         wc.terminate()
         wc.close()
         print("World Championships stopped")

@@ -66,7 +66,7 @@ class Bejeweled3WorldChampionships:
         
         current_score = get_score()
         
-        while not (over_condition() or self.is_challenge_time_up()):
+        while not over_condition():
             score_pointer.update_address()
             previous_score = current_score
             current_score = get_score()
@@ -93,6 +93,10 @@ class Bejeweled3WorldChampionships:
                     
                     get_score = lambda: max(0, int(subchallenge_end_time - time.time()) * 1000)
                     break
+            
+            elif self.is_challenge_time_up():
+                self.fail_type = "time out"
+                break
 
         return get_score() - difference
              

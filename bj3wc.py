@@ -62,7 +62,7 @@ class Bejeweled3WorldChampionships:
             over_condition = lambda: Pointer(self.game, 0xbe0, 0x323c).get_value() <= 0
         
         score_pointer = self.get_score_pointer(subchallenge)
-        get_score = lambda: score_pointer.get_value()
+        get_score = lambda: score_pointer.get_value() - difference
         
         current_score = get_score()
         
@@ -79,7 +79,7 @@ class Bejeweled3WorldChampionships:
                     print(f"{self.penalty} second penalty!")
                     self.challenge_end_time -= self.penalty
                 
-                get_score = lambda: previous_score
+                get_score = lambda: previous_score - difference
                 break
             
             elif subchallenge.time_bonus_enabled:
@@ -91,14 +91,15 @@ class Bejeweled3WorldChampionships:
                         print(f"{self.penalty} second penalty!")
                         self.challenge_end_time -= self.penalty
                     
-                    get_score = lambda: max(0, int(subchallenge_end_time - time.time()) * 1000)
+                    get_score = lambda: int(subchallenge_end_time - time.time()) * 1000
                     break
             
             elif self.is_challenge_time_up():
-                self.fail_type = "time out"
+                if len(self.challenge.subchallenges) != 0:
+                    self.fail_type = "challenge end"
                 break
 
-        return get_score() - difference
+        return max(0, get_score())
              
     def get_condition_pointer(self, subchallenge: Subchallenge):
         pointer_offsets = CHALLENGE_DATA[subchallenge.objective]["pointer_offsets"]
@@ -137,7 +138,10 @@ class Bejeweled3WorldChampionships:
         
         match subchallenge.objective:
             case "Avalanche":
-                difference = MINIQUEST_GOALS[self.game.get_quest_id()] - subchallenge.condition
+                if subchallenge.mode == "value":
+                    difference = MINIQUEST_GOALS[self.game.get_quest_id()] - subchallenge.condition
+                else:
+                    difference = -1000
                 Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
             
             case "Balance":
@@ -154,7 +158,10 @@ class Bejeweled3WorldChampionships:
                     Pointer(self.game, 0xbe0, 0x395c).set_value(1000)       # Change number of hands remaining to 1000
             
             case "TimeBomb" | "MatchBomb":
-                difference = MINIQUEST_GOALS[self.game.get_quest_id()] - subchallenge.condition
+                if subchallenge.mode == "value":
+                    difference = MINIQUEST_GOALS[self.game.get_quest_id()] - subchallenge.condition
+                else:
+                    difference = -1000
                 Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
             
             case "Stratamax":
@@ -213,6 +220,8 @@ class Bejeweled3WorldChampionships:
             
             dordle_time = time.time()
             self.wait_until_open(subchallenge)
+            time.sleep(0.5)
+            
             if self.challenge.mode == "timed":
                 self.challenge_end_time += time.time() - dordle_time
                 self.gui_queue.put(QueueItem("new_end_time", self.challenge_end_time))

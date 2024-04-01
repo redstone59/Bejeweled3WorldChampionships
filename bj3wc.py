@@ -1,14 +1,17 @@
 from bejeweled import *
-from gui import *
 from challenges import *
+from queue_items import *
+
+import queue
 
 MINIQUEST_GOALS: list = json.load(open(pathlib.Path(PATH, "miniquest_goals.json")))
 
 class Bejeweled3WorldChampionships:
     def __init__(self):
         self.challenge = None
-        self.gui = GraphicalUserInterface()
         self.game = BejeweledThreeProcess()
+        self.gui_queue = queue.Queue()              # Sends actions to the GUI (scores, reset, etc)
+        self.action_queue = queue.Queue()           # Receives actions from the GUI (opened challenge)
         
         self.challenge_end_time = 0
         self.penalty = 120
@@ -18,19 +21,34 @@ class Bejeweled3WorldChampionships:
         if subchallenge.objective in ["Avalanche", "Butterflies", "ButterClear", "ButterCombo", "MatchBomb", "TimeBomb"]:
             extra_pointer = Pointer(self.game, 0xbe0, 0x3238)
             
-            if subchallenge.extra == None: # Apply defaults
+            if subchallenge.extra == None:          # Apply defaults
                 match subchallenge.objective:
                     case "Avalanche":
-                        extra_pointer.set_value(5) # 5 gems fall per turn
+                        extra_pointer.set_value(5)  # 5 gems fall per turn
                         
                     case "Butterflies" | "ButterClear" | "ButterCombo":
-                        extra_pointer.set_value(1) # Butterflies move up every match
+                        extra_pointer.set_value(1)  # Butterflies move up every match
                         
                     case "MatchBomb" | "TimeBomb":
                         extra_pointer.set_value(30) # Initial value for bombs is 30 turns or seconds.
             
             else:
                 extra_pointer.set_value(subchallenge.extra)
+    
+    def check_queue(self):
+        running = True
+        
+        while running:
+            if self.action_queue.empty(): continue
+            action: QueueItem = self.action_queue.get()
+            
+            match action.function:
+                case "abort":
+                    running = False
+                case "open":
+                    self.open_challenge(action.arguments[0])
+                case "start":
+                    self.start()
     
     def do_subchallenge(self, subchallenge: Subchallenge):
         self.game.reset_scores()
@@ -76,17 +94,17 @@ class Bejeweled3WorldChampionships:
                 
                 get_score = lambda: previous_score
                 break
-            elif subchallenge.time_bonus_enabled and subchallenge_end_time <= time.time():
-                print("Challenge failed! (time ran out)")
-                
-                if self.challenge.mode == "timed":
-                    print(f"{self.penalty} second penalty!")
-                    self.challenge_end_time -= self.penalty
+            
+            elif subchallenge.time_bonus_enabled:
+                if subchallenge_end_time <= time.time():
+                    print("Challenge failed! (time ran out)")
                     
-                break
-
-        if subchallenge.mode == "value" and subchallenge.time_bonus_enabled:
-            get_score = lambda: max(0, int((subchallenge_end_time - time.time()) * 1000))
+                    if self.challenge.mode == "timed":
+                        print(f"{self.penalty} second penalty!")
+                        self.challenge_end_time -= self.penalty
+                    
+                    get_score = lambda: max(0, int(subchallenge_end_time - time.time()) * 1000)
+                    break
 
         return get_score() - difference
              
@@ -133,23 +151,23 @@ class Bejeweled3WorldChampionships:
             case "Balance":
                 balance_amount = (subchallenge.condition // 2) if subchallenge.mode == "value" else 34710
                 Pointer(self.game, 0xbe0, 0x3238).set_value(balance_amount) # Set BalanceGoal
-                Pointer(self.game, 0xbe0, 0x323c).set_value(9) # Fix speed (could probably make this an extra tbh)
+                Pointer(self.game, 0xbe0, 0x323c).set_value(9)              # Fix speed (could probably make this an extra tbh)
             
             case "BuriedTreasure" | "GoldRush" | "Sandstorm" | "WallBlast":
-                Pointer(self.game, 0xbe0, 0x3238).set_value(1800) # Set time to 30 minutes
+                Pointer(self.game, 0xbe0, 0x3238).set_value(1800)           # Set time left to 30 minutes
             
             case "Poker" | "PokerLimit" | "PokerHand" | "PokerSkull":
-                if self.game.get_quest_id() != 1000:
-                    Pointer(self.game, 0xbe0, 0x323c).set_value(100000)
-                    Pointer(self.game, 0xbe0, 0x395c).set_value(1000)
+                if self.game.get_quest_id() != 1000:                        # This will never be met - Poker quests only start on the secret Poker mode.
+                    Pointer(self.game, 0xbe0, 0x323c).set_value(100000)     # Set PokerGoal to absurdly high number
+                    Pointer(self.game, 0xbe0, 0x395c).set_value(1000)       # Change number of hands remaining to 1000
             
             case "TimeBomb" | "MatchBomb":
-                difference = -1000
+                difference = MINIQUEST_GOALS[self.game.get_quest_id()] - subchallenge.condition
                 Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
             
             case "Stratamax":
                 difference = -1000
-                Pointer(self.game, 0xbe0, 0xe00).set_value(difference)
+                Pointer(self.game, 0xbe0, 0xe00).set_value(difference) 
                 Pointer(self.game, 0xbe0, 0x3238).set_value(subchallenge.condition)
                 Pointer(self.game, 0xbe0, 0x323c).set_value(subchallenge.condition)
         
@@ -171,12 +189,14 @@ class Bejeweled3WorldChampionships:
         print("Time!")
         
         add_and_display_scores(self.scores)
+        self.gui_queue.put(QueueItem("challenge_end", self.scores))
 
     def subchallenge_loop(self): 
         while not (self.challenge.is_over() or self.is_challenge_time_up()):
             subchallenge = self.challenge.next()
             
             print(subchallenge)
+            self.gui_queue.put(QueueItem("subchallenge", subchallenge.get_gui_string(), str(subchallenge)))
             
             if subchallenge.objective in ["ClasLevel", "ZenLevel"]: # Zero-indexed internally, One-indexed externally
                 subchallenge.condition -= 1
@@ -190,6 +210,7 @@ class Bejeweled3WorldChampionships:
             print("Go!")
             
             final_score = self.do_subchallenge(subchallenge)
+            self.gui_queue.put(QueueItem("score", final_score))
             
             self.scores[subchallenge.objective] = {"multiplier": subchallenge.multiplier, "score": final_score}
     

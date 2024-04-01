@@ -53,7 +53,7 @@ class GraphicalUserInterface:
         
         self.index += 1
     
-    def add_subchallenge_text(self, text: str):
+    def add_subchallenge_text(self, abbreviated_text: str, description_text: str):
         text_position = {"normal": (38, 130 + 35 * self.index), # Estimated vertical offset
                          "high": (49, 167 + 46 * self.index),
                          "ultra": (76, 261 + 72 * self.index)
@@ -63,8 +63,21 @@ class GraphicalUserInterface:
                 "ultra": 30
                 }[self.size.get()]
         
-        self.labels["challenges"] += [ImageTk.PhotoImage(self.font.get_render(size, text, colour = "#f4f4d0", align = "ls"))]
+        self.labels["challenges"] += [ImageTk.PhotoImage(self.font.get_render(size, abbreviated_text, colour = "#f4f4d0", align = "ls"))]
         self.canvas.create_image(text_position, image = self.labels["challenges"][-1])
+        
+        text_position = {"normal": (150, 592),
+                         "high": (196, 758),
+                         "ultra": (300, 1185)
+                         }[self.size.get()]
+        size = {"normal": 8,
+                "high": 10,
+                "ultra": 16
+                }[self.size.get()]
+        
+        self.canvas.delete("current_quest")
+        self.labels["current_quest"] = ImageTk.PhotoImage(self.font.get_render(size, description_text))
+        self.canvas.create_image(text_position, image = self.labels["current_quest"], tags = "current_quest")
     
     def add_multiplied_scores(self, scores: dict):
         size = {"normal": 15,
@@ -149,8 +162,16 @@ class GraphicalUserInterface:
             action: QueueItem = self.gui_queue.get()
             
             match action.function:
-                case _:
-                    pass
+                case "subchallenge":
+                    self.add_subchallenge_text(*action.arguments)
+                case "score":
+                    self.add_subchallenge_score(action.arguments[0])
+                case "challenge_end":
+                    self.add_multiplied_scores(action.arguments[0])
+            
+            self.root.update()
+        
+        self.root.after(100, self.check_queue)
     
     def close(self):
         # I know I could put the below into one if statement but that would be a long ass line of code.
@@ -159,7 +180,7 @@ class GraphicalUserInterface:
                 return
         
         self.root.destroy()
-        self.gui_queue.put("abort")
+        self.action_queue.put(QueueItem("abort", ()))
 #       exit()
     
     def open_challenge_file(self):
@@ -180,6 +201,7 @@ class GraphicalUserInterface:
                 messagebox.showerror("Uh oh!", f"Invalid challenge chosen!\n{e.__class__}: {e}")
         
         self.action_queue.put(QueueItem("open", challenge))
+        self.action_queue.put(QueueItem("start", ()))
         return challenge
     
     def reset_labels(self):
@@ -307,21 +329,5 @@ class GraphicalUserInterface:
         about_button.place(x = 150, y = 0)
     
     def start(self):
+        self.root.after(100, self.check_queue)
         self.root.mainloop()
-
-g = GraphicalUserInterface()
-
-c = Challenge("Challenge E", "redstone59", "Non-timed challenge included with BJ3WC", "timed", [], 40)
-g.challenge = c
-g.add_metadata_text()
-g.size.set("high")
-g.set_resolution()
-g.add_subchallenge_text("Lightning: 45s in tank")
-g.add_subchallenge_score(52350)
-g.add_subchallenge_text("Poker: 10 hands")
-g.add_subchallenge_score(185750)
-g.add_subchallenge_text("Match Bomb: 8 bombs (60s) [15]")
-g.add_subchallenge_score(56976)
-g.add_multiplied_scores({"a": {"multiplier": 1, "score": 52350}, "b": {"multiplier": 3, "score": 185750}, "c": {"multiplier": 5, "score": 56976}})
-
-g.start()

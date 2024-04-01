@@ -1,13 +1,11 @@
-from bj3wc import *
-from gui import *
-
-import multiprocessing
+from multiprocessing import Process, Manager, freeze_support
 
 def main():
-    gui = GraphicalUserInterface()
+    VER = "1.0-prerelease"
+    gui = GraphicalUserInterface(VER)
     world_championships = Bejeweled3WorldChampionships()
     
-    with multiprocessing.Manager() as manager:
+    with Manager() as manager:
         gui_queue = manager.Queue()
         action_queue = manager.Queue()
         
@@ -16,7 +14,7 @@ def main():
         gui.gui_queue = gui_queue
         gui.action_queue = action_queue
         
-        wc = multiprocessing.Process(target = world_championships.process_loop, name = "championships")
+        wc = Process(target = world_championships.process_loop, name = "championships")
         
         wc.start()
         
@@ -33,4 +31,7 @@ def main():
         print("World Championships stopped")
         
 if __name__ == "__main__":
+    freeze_support() # This should make Pyinstaller not launch the program multiple times.
+    from bj3wc import *
+    from gui import *
     main()

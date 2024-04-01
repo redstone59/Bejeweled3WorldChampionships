@@ -19,7 +19,7 @@ def sha256_sum(string_to_hash: str):
     return hashlib.sha256(string_to_hash.encode('utf-8')).hexdigest()
 
 class GraphicalUserInterface:
-    def __init__(self):
+    def __init__(self, version: str):
         self.gui_queue = queue.Queue()           # Receives commands from BJ3WC (new challenges, scores, etc)
         self.action_queue = queue.Queue()        # Sends actions to BJ3WC (abort challenge, open new challenge, etc etc)
         self.font = RenderFont(get_from_resources("Flare Gothic Regular.ttf"))
@@ -34,6 +34,7 @@ class GraphicalUserInterface:
         self.show_time_left = tk.BooleanVar(value = False)
         self.index = 0
         self.pester_about_game = True
+        self.version = version
         
         self.reset_labels()
         self.set_up_menu_bar()
@@ -260,9 +261,9 @@ class GraphicalUserInterface:
         self.root.geometry(resolution)
         
         if self.size.get() == "ultra":
-            self.root.title("Bejeweled 3 World Championships v0.2.0")
+            self.root.title(f"Bejeweled 3 World Championships v{self.version}")
         else:
-            self.root.title("BJ3WC v0.2.0")
+            self.root.title(f"BJ3WC v{self.version}")
         
         self.set_up_canvas(self.size.get())
         self.add_metadata_text()

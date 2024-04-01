@@ -17,13 +17,10 @@ def main():
         gui.action_queue = action_queue
         
         wc = multiprocessing.Process(target = world_championships.check_queue, name = "championships")
-        g = multiprocessing.Process(target = gui.start, name = "gui")
         
         wc.start()
-        g.start()
         
-        g.join()
-        print("GUI stopped")
+        gui.start()
         wc.join()
         print("World Championships stopped")
         

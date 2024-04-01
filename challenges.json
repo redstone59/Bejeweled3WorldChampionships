@@ -29,7 +29,7 @@
             },
             "abbreviated": {
                 "value": "Classic: <condition> points",
-                "timed": ""
+                "timed": "Classic: Score"
             },
             "suffix": "in <time> seconds"
         }
@@ -48,7 +48,7 @@
             },
             "abbreviated": {
                 "value": "Zen: <condition> points",
-                "timed": ""
+                "timed": "Zen: Score"
             },
             "suffix": "in <time> seconds"
         }
@@ -67,7 +67,7 @@
             },
             "abbreviated": {
                 "value": "Lightning: <condition> points",
-                "timed": ""
+                "timed": "Lightning: Score"
             },
             "suffix": "in <time> seconds"
         }
@@ -86,7 +86,7 @@
             },
             "abbreviated": {
                 "value": "Poker: <condition> points",
-                "timed": ""
+                "timed": "Poker: Score"
             },
             "suffix": "in <time> seconds"
         }
@@ -105,7 +105,7 @@
             },
             "abbreviated": {
                 "value": "Butterflies: <condition> points",
-                "timed": ""
+                "timed": "Butterflies: Score"
             },
             "suffix": "in <time> seconds"
         }
@@ -124,7 +124,7 @@
             },
             "abbreviated": {
                 "value": "Ice Storm: <condition> points",
-                "timed": ""
+                "timed": "Ice Storm: Score"
             },
             "suffix": "in <time> seconds"
         }
@@ -132,7 +132,6 @@
     "DiamondMine": {
         "allowed_modes": ["value", "timed", "endless"],
         "pointer_offsets": ["0xbe0", "0xe00"],
-        "abbreviated_string": "Diamond Mine: <condition> points",
         "requirements": {
             "board_types": ["DIG_BOARD"],
             "quest_ids": [1003]
@@ -143,8 +142,8 @@
                 "timed": "Diamond Mine: Score as many points as you can <suffix>!"
             },
             "abbreviated": {
-                "value": "",
-                "timed": ""
+                "value": "Diamond Mine: <condition> points",
+                "timed": "Diamond Mine: Score"
             },
             "suffix": "in <time> seconds"
         }
@@ -163,7 +162,7 @@
             },
             "abbreviated": {
                 "value": "Classic: Level <condition>",
-                "timed": ""
+                "timed": "Classic: Level"
             },
             "suffix": "in <time> seconds"
         }
@@ -182,7 +181,7 @@
             },
             "abbreviated": {
                 "value": "Zen: Level <condition>",
-                "timed": ""
+                "timed": "Zen: Level"
             },
             "suffix": "in <time> seconds"
         }
@@ -202,7 +201,7 @@
             },
             "abbreviated": {
                 "value": "Lightning: Multiplier of <condition>",
-                "timed": ""
+                "timed": "Lightning: Multiplier"
             },
             "suffix": "in <time> seconds"
         }
@@ -221,7 +220,7 @@
             },
             "abbreviated": {
                 "value": "Lightning: <condition>s in tank",
-                "timed": ""
+                "timed": "Lightning: Fill tank"
             },
             "suffix": "in <time> seconds"
         }
@@ -240,7 +239,7 @@
             },
             "abbreviated": {
                 "value": "Lightning: <condition> Blazings",
-                "timed": ""
+                "timed": "Lightning: Blazings"
             },
             "suffix": "in <time> seconds"
         }
@@ -259,7 +258,7 @@
             },
             "abbreviated": {
                 "value": "Quest: <condition> Quests",
-                "timed": ""
+                "timed": "Quest: Quests"
             },
             "suffix": "in <time> seconds"
         }
@@ -294,7 +293,7 @@
             },
             "abbreviated": {
                 "value": "Poker: <condition> <extra>",
-                "timed": ""
+                "timed": "Poker: <extra>"
             },
             "suffix": "in <time> seconds"
         }
@@ -313,7 +312,7 @@
             },
             "abbreviated": {
                 "value": "Poker: <condition> skulls",
-                "timed": ""
+                "timed": "Poker: Skulls"
             },
             "suffix": "in <time> seconds"
         }
@@ -332,7 +331,7 @@
             },
             "abbreviated": {
                 "value": "Butterflies: <condition> butterflies",
-                "timed": ""
+                "timed": "Butterflies: Butterflies"
             },
             "suffix": "in <time> seconds"
         }
@@ -351,7 +350,7 @@
             },
             "abbreviated": {
                 "value": "Butterflies: Combo of <condition>",
-                "timed": ""
+                "timed": "Butterflies: Combo"
             },
             "suffix": "in <time> seconds"
         }
@@ -370,7 +369,7 @@
             },
             "abbreviated": {
                 "value": "Ice Storm: <condition> columns",
-                "timed": ""
+                "timed": "Ice Storm: Columns"
             },
             "suffix": "in <time> seconds"
         }
@@ -389,7 +388,7 @@
             },
             "abbreviated": {
                 "value": "Ice Storm: Combo of <condition>",
-                "timed": ""
+                "timed": "Ice Storm: Combo"
             },
             "suffix": "within <time> seconds"
         }
@@ -408,7 +407,7 @@
             },
             "abbreviated": {
                 "value": "Diamond Mine: Dig <condition>m",
-                "timed": ""
+                "timed": "Diamond Mine: Depth"
             },
             "suffix": "within <time> seconds"
         }
@@ -427,7 +426,7 @@
             },
             "abbreviated": {
                 "value": "Diamond Mine: <condition> treasures",
-                "timed": ""
+                "timed": "Diamond Mine: Treasures"
             },
             "suffix": "in <time> seconds"
         }
@@ -446,7 +445,7 @@
             },
             "abbreviated": {
                 "value": "Balance: <condition> gems",
-                "timed": ""
+                "timed": "Balance: Gems"
             },
             "suffix": "within <time> seconds"
         }
@@ -497,7 +496,7 @@
             },
             "abbreviated": {
                 "value": "Alchemy: <condition> squares",
-                "timed": ""
+                "timed": "Alchemy: Squares"
             },
             "suffix": "within <time> seconds"
         }
@@ -516,7 +515,7 @@
             },
             "abbreviated": {
                 "value": "Time Bomb: <condition> bombs",
-                "timed": ""
+                "timed": "Time Bomb: Bombs"
             },
             "suffix": "within <time> seconds"
         }
@@ -535,7 +534,7 @@
             },
             "abbreviated": {
                 "value": "Match Bomb: <condition> bombs",
-                "timed": ""
+                "timed": "Match Bomb: bombs"
             },
             "suffix": "within <time> seconds"
         }
@@ -554,7 +553,7 @@
             },
             "abbreviated": {
                 "value": "Avalanche: <condition> gems",
-                "timed": ""
+                "timed": "Avalanche: Gems"
             },
             "suffix": "within <time> seconds"
         }
@@ -573,7 +572,7 @@
             },
             "abbreviated": {
                 "value": "Wall Blast: <condition> tiles",
-                "timed": ""
+                "timed": "Wall Blast: Tiles"
             },
             "suffix": "within <time> seconds"
         }
@@ -624,7 +623,7 @@
             },
             "abbreviated": {
                 "value": "Any: <condition> gems in one move",
-                "timed": ""
+                "timed": "Any: Gems in a move"
             },
             "suffix": "within <time> seconds"
         }
@@ -643,7 +642,7 @@
             },
             "abbreviated": {
                 "value": "Any: <condition> Flame Gems",
-                "timed": ""
+                "timed": "Any: Flame Gems"
             },
             "suffix": "within <time> seconds"
         }
@@ -662,7 +661,7 @@
             },
             "abbreviated": {
                 "value": "Any: <condition> Star Gems",
-                "timed": ""
+                "timed": "Any: Star Gems"
             },
             "suffix": "within <time> seconds"
         }
@@ -681,7 +680,7 @@
             },
             "abbreviated": {
                 "value": "Any: <condition> Hypercubes",
-                "timed": ""
+                "timed": "Any: Hypercubes"
             },
             "suffix": "within <time> seconds"
         }

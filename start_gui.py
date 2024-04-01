@@ -4,8 +4,8 @@ from gui import *
 import multiprocessing
 
 def main():
-    world_championships = Bejeweled3WorldChampionships()
     gui = GraphicalUserInterface()
+    world_championships = Bejeweled3WorldChampionships()
     
     with multiprocessing.Manager() as manager:
         gui_queue = manager.Queue()
@@ -16,14 +16,20 @@ def main():
         gui.gui_queue = gui_queue
         gui.action_queue = action_queue
         
-        wc = multiprocessing.Process(target = world_championships.check_queue, name = "championships")
+        wc = multiprocessing.Process(target = world_championships.process_loop, name = "championships")
         
         wc.start()
         
         gui.start()
-        wc.join()
+        
+        while True:
+            try:
+                gui.root.state
+            except:
+                break
+        
+        wc.close()
         print("World Championships stopped")
         
-
 if __name__ == "__main__":
     main()

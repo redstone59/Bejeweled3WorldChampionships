@@ -69,7 +69,7 @@ class Subchallenge:
         
         if self.objective == "PokerHand":
             result_string = result_string.replace("<extra>", str(self.extra) + "s")
-        else:
+        elif self.extra != None:
             result_string += f" [{self.extra}]"
         
         return result_string

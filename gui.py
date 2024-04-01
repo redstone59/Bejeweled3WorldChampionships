@@ -49,7 +49,7 @@ class GraphicalUserInterface:
                 }[self.size.get()]
         
         self.labels["scores"] += [ImageTk.PhotoImage(self.font.get_render(size, f"{score:,}", colour = "#f4f4d0", align = "ls"))]
-        self.canvas.create_image(text_position, image = self.labels["scores"][-1])
+        self.canvas.create_image(text_position, image = self.labels["scores"][-1], tags = "game")
         
         self.index += 1
     
@@ -64,7 +64,7 @@ class GraphicalUserInterface:
                 }[self.size.get()]
         
         self.labels["challenges"] += [ImageTk.PhotoImage(self.font.get_render(size, abbreviated_text, colour = "#f4f4d0", align = "ls"))]
-        self.canvas.create_image(text_position, image = self.labels["challenges"][-1])
+        self.canvas.create_image(text_position, image = self.labels["challenges"][-1], tags = "game")
         
         text_position = {"normal": (150, 592),
                          "high": (196, 758),
@@ -80,6 +80,8 @@ class GraphicalUserInterface:
         self.canvas.create_image(text_position, image = self.labels["current_quest"], tags = "current_quest")
     
     def add_multiplied_scores(self, scores: dict):
+        self.canvas.delete("current_quest")
+        
         size = {"normal": 15,
                 "high": 19,
                 "ultra": 30
@@ -100,10 +102,10 @@ class GraphicalUserInterface:
             score = scores[key]
             
             self.labels["multipliers"] += [ImageTk.PhotoImage(self.font.get_render(size, f"x{score["multiplier"]:,}", colour = "#ffff60", align = "rs"))]
-            self.canvas.create_image(multiplier_position, image = self.labels["multipliers"][-1])
+            self.canvas.create_image(multiplier_position, image = self.labels["multipliers"][-1], tags = "game")
             
             self.labels["multiplied_scores"] += [ImageTk.PhotoImage(self.font.get_render(size, f"{score["score"] * score["multiplier"]:,}", colour = "#ffff60", align = "rs"))]
-            self.canvas.create_image(score_position, image = self.labels["multiplied_scores"][-1])
+            self.canvas.create_image(score_position, image = self.labels["multiplied_scores"][-1], tags = "game")
             
             final_score += score["score"] * score["multiplier"]
             self.index += 1
@@ -134,20 +136,26 @@ class GraphicalUserInterface:
                                   (250, 44),
                                   (399, 69)
                                   ][index],
-                                 image = self.labels["metadata"][-1])
+                                 image = self.labels["metadata"][-1],
+                                 tags = "game"
+                                 )
         self.labels["metadata"] += [ImageTk.PhotoImage(self.font.get_render(size, self.challenge.author))]
         self.canvas.create_image([(179, 51),
                                   (250, 67),
                                   (399, 104)
                                   ][index],
-                                 image = self.labels["metadata"][-1])
+                                 image = self.labels["metadata"][-1],
+                                 tags = "game"
+                                 )
         description = insert_newlines(self.challenge.description, 30)[:60] # Split every 30 characters, and trim after 60 characters
         self.labels["metadata"] += [ImageTk.PhotoImage(self.font.get_render(size, description, align = "la"))]
         self.canvas.create_image([(121, 66),
                                   (155, 85),
                                   (243, 133)
                                   ][index],
-                                 image = self.labels["metadata"][-1])
+                                 image = self.labels["metadata"][-1],
+                                 tags = "game"
+                                 )
         
         hash_text = f"Challenge hash:\n{sha256_sum(self.challenge.to_dict())}"
         self.labels["metadata"] += [ImageTk.PhotoImage(self.font.get_render([7, 9, 12][index], hash_text, align = "mm"))]
@@ -155,19 +163,21 @@ class GraphicalUserInterface:
                                   (196, 601),
                                   (300, 940)
                                   ][index],
-                                 image = self.labels["metadata"][-1])
+                                 image = self.labels["metadata"][-1],
+                                 tags = "game"
+                                 )
     
     def check_queue(self):
         while not self.gui_queue.empty():
             action: QueueItem = self.gui_queue.get()
             
             match action.function:
-                case "subchallenge":
-                    self.add_subchallenge_text(*action.arguments)
-                case "score":
-                    self.add_subchallenge_score(action.arguments[0])
                 case "challenge_end":
                     self.add_multiplied_scores(action.arguments[0])
+                case "score":
+                    self.add_subchallenge_score(action.arguments[0])
+                case "subchallenge":
+                    self.add_subchallenge_text(*action.arguments)
             
             self.root.update()
         
@@ -199,7 +209,7 @@ class GraphicalUserInterface:
             except (InvalidChallengeError, InvalidSubchallengeError, FileNotFoundError) as e:
                 print(f"{e.__class__}: {e}")
                 messagebox.showerror("Uh oh!", f"Invalid challenge chosen!\n{e.__class__}: {e}")
-        
+
         self.action_queue.put(QueueItem("open", challenge))
         self.action_queue.put(QueueItem("start", ()))
         return challenge
@@ -329,5 +339,5 @@ class GraphicalUserInterface:
         about_button.place(x = 150, y = 0)
     
     def start(self):
-        self.root.after(100, self.check_queue)
+        self.root.after(0, self.check_queue)
         self.root.mainloop()

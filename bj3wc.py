@@ -9,7 +9,7 @@ MINIQUEST_GOALS: list = json.load(open(pathlib.Path(PATH, "miniquest_goals.json"
 class Bejeweled3WorldChampionships:
     def __init__(self):
         self.challenge = None
-        self.game = BejeweledThreeProcess()
+        self.game = None
         self.gui_queue = queue.Queue()              # Sends actions to the GUI (scores, reset, etc)
         self.action_queue = queue.Queue()           # Receives actions from the GUI (opened challenge)
         
@@ -34,21 +34,6 @@ class Bejeweled3WorldChampionships:
             
             else:
                 extra_pointer.set_value(subchallenge.extra)
-    
-    def check_queue(self):
-        running = True
-        
-        while running:
-            if self.action_queue.empty(): continue
-            action: QueueItem = self.action_queue.get()
-            
-            match action.function:
-                case "abort":
-                    running = False
-                case "open":
-                    self.open_challenge(action.arguments[0])
-                case "start":
-                    self.start()
     
     def do_subchallenge(self, subchallenge: Subchallenge):
         self.game.reset_scores()
@@ -176,6 +161,23 @@ class Bejeweled3WorldChampionships:
     def open_challenge(self, challenge: Challenge):
         self.challenge = challenge
 
+    def process_loop(self):
+        running = True
+        
+        self.game = BejeweledThreeProcess() # Fixes worlds strangest bug (pointers dont read if the game isnt found inside of the process)
+        
+        while running:
+            if self.action_queue.empty(): continue
+            action: QueueItem = self.action_queue.get()
+            
+            match action.function:
+                case "abort":
+                    running = False
+                case "open":
+                    self.open_challenge(action.arguments[0])
+                case "start":
+                    self.start()
+    
     def start(self):
         if self.challenge == None:
             raise ValueError("No challenge has been loaded. Use Bejeweled3WorldChampionships().open_challenge()")
@@ -206,7 +208,6 @@ class Bejeweled3WorldChampionships:
             if self.challenge.mode == "timed":
                 self.challenge_end_time += time.time() - dordle_time
             
-            time.sleep(0.5)
             print("Go!")
             
             final_score = self.do_subchallenge(subchallenge)
@@ -236,7 +237,7 @@ class Bejeweled3WorldChampionships:
         
         condition_pointer = self.get_condition_pointer(subchallenge)
         score_reset = lambda: condition_pointer.get_value() == initial_value
-        new_game_started = lambda: correct_game_open() and score_reset
+        new_game_started = lambda: correct_game_open() and score_reset()
         
         while not new_game_started():
             condition_pointer.update_address()

@@ -19,14 +19,20 @@ class Bejeweled3WorldChampionships:
         self.fail_type = None
     
     def add_subchallenge_extra(self, subchallenge: Subchallenge):
-        if subchallenge.objective in ["Avalanche", "Butterflies", "ButterClear", "ButterCombo", "MatchBomb", "TimeBomb"]:
-            extra_pointer = Pointer(self.game, 0xbe0, 0x3238)
+        if subchallenge.objective in ["Avalanche", "Balance", "Butterflies", "ButterClear", "ButterCombo", "MatchBomb", "TimeBomb"]:
+            if subchallenge.objective == "Balance":
+                extra_pointer = Pointer(self.game, 0xbe0, 0x323c)
+            else:
+                extra_pointer = Pointer(self.game, 0xbe0, 0x3238)
             
             if subchallenge.extra == None:          # Apply defaults
                 match subchallenge.objective:
                     case "Avalanche":
                         extra_pointer.set_value(5)  # 5 gems fall per turn
-                        
+                    
+                    case "Balance":
+                        extra_pointer.set_value(9) # Fix gem scale speed.
+                    
                     case "Butterflies" | "ButterClear" | "ButterCombo":
                         extra_pointer.set_value(1)  # Butterflies move up every match
                         
@@ -149,7 +155,6 @@ class Bejeweled3WorldChampionships:
             case "Balance":
                 balance_amount = (subchallenge.condition // 2) if subchallenge.mode == "value" else 34710
                 Pointer(self.game, 0xbe0, 0x3238).set_value(balance_amount) # Set BalanceGoal
-                Pointer(self.game, 0xbe0, 0x323c).set_value(9)              # Fix speed (could probably make this an extra tbh)
             
             case "BuriedTreasure" | "GoldRush" | "Sandstorm" | "WallBlast":
                 Pointer(self.game, 0xbe0, 0x3238).set_value(1800)           # Set time left to 30 minutes

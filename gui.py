@@ -216,26 +216,24 @@ class GraphicalUserInterface:
 #       exit()
     
     def open_challenge_file(self):
-        while True:
-            challenge_file = filedialog.askopenfilename(parent = self.root, title = "Open challenge file", filetypes = [("JSON file", ".json")])
+        challenge_file = filedialog.askopenfilename(parent = self.root, title = "Open challenge file", filetypes = [("JSON file", ".json")])
+        
+        try:
+            with open(challenge_file) as file:
+                challenge = load_challenge_json(file.read())
             
-            try:
-                with open(challenge_file) as file:
-                    challenge = load_challenge_json(file.read())
-                
-                self.challenge = challenge
-                self.reset_labels()
-                self.add_metadata_text()
-                
-                if self.challenge.mode == "timed":
-                    self.challenge_end_time = time.time() + self.challenge.time
-                
-                break
-                
-            except (InvalidChallengeError, InvalidSubchallengeError, FileNotFoundError) as e:
-                print(f"{e.__class__}: {e}")
-                messagebox.showerror("Uh oh!", f"Invalid challenge chosen!\n{e.__class__}: {e}")
-                return
+            self.challenge = challenge
+            self.reset_labels()
+            self.add_metadata_text()
+            
+            if self.challenge.mode == "timed":
+                self.challenge_end_time = time.time() + self.challenge.time
+            
+            break
+            
+        except (InvalidChallengeError, InvalidSubchallengeError, FileNotFoundError) as e:
+            print(f"{e.__class__}: {e}")
+            messagebox.showerror("Uh oh!", f"Invalid challenge chosen!\n{e.__class__}: {e}")
 
         self.index = 0
         self.action_queue.put(QueueItem("open", challenge))

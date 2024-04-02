@@ -229,17 +229,17 @@ class GraphicalUserInterface:
             if self.challenge.mode == "timed":
                 self.challenge_end_time = time.time() + self.challenge.time
             
-            break
-            
         except (InvalidChallengeError, InvalidSubchallengeError, FileNotFoundError) as e:
             print(f"{e.__class__}: {e}")
             messagebox.showerror("Uh oh!", f"Invalid challenge chosen!\n{e.__class__}: {e}")
+            return
 
         self.index = 0
         self.action_queue.put(QueueItem("open", challenge))
         self.action_queue.put(QueueItem("start", ()))
         self.update_menu_states(True)
         self.toggle_time_display()
+        
         return challenge
     
     def reset_labels(self):

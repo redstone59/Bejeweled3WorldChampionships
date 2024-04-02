@@ -36,7 +36,7 @@ class Subchallenge:
         result["mode"] = self.mode
         
         if self.mode == "value": result["condition"] = self.condition
-        if self.time_bonus_enabled: result["time_bonus"] = True
+        if self.time_bonus_enabled: result["time_bonus_enabled"] = True
         if self.time != None: result["time"] = self.time
         if self.extra != None: result["extra"] = self.extra
         

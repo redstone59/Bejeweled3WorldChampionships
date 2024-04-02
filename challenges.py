@@ -70,7 +70,14 @@ class Subchallenge:
             result_string += f" ({self.time}s)"
         
         if self.objective == "PokerHand":
-            result_string = result_string.replace("<extra>", str(self.extra) + "s")
+            if self.condition <= 1:
+                plural_suffix = ""
+            elif self.extra == "Flush":
+                plural_suffix = "es"
+            else:
+                plural_suffix = "s"
+                
+            result_string = result_string.replace("<extra>", str(self.extra) + plural_suffix)
         elif self.extra != None:
             result_string += f" [{self.extra}]"
         

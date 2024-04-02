@@ -31,7 +31,7 @@ class Bejeweled3WorldChampionships:
                         extra_pointer.set_value(5)  # 5 gems fall per turn
                     
                     case "Balance":
-                        extra_pointer.set_value(9) # Fix gem scale speed.
+                        extra_pointer.set_value(9)  # Fix gem scale speed.
                     
                     case "Butterflies" | "ButterClear" | "ButterCombo":
                         extra_pointer.set_value(1)  # Butterflies move up every match

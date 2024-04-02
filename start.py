@@ -1,7 +1,7 @@
 from multiprocessing import Process, Manager, freeze_support
 
 def main():
-    VER = "1.0-prerelease"
+    VER = "1.1-prerelease"
     gui = GraphicalUserInterface(VER)
     world_championships = Bejeweled3WorldChampionships()
     

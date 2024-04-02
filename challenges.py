@@ -34,15 +34,13 @@ class Subchallenge:
         result = {}
         result["objective"] = self.objective
         result["mode"] = self.mode
+        result["condition"] = self.condition
         
-        if self.mode == "value": result["condition"] = self.condition
         if self.time_bonus_enabled: result["time_bonus"] = True
         if self.time != None: result["time"] = self.time
         if self.extra != None: result["extra"] = self.extra
         
         result["multiplier"] = self.multiplier
-
-        return result
     
     def get_initial_value(self):
         open_requirements = CHALLENGE_DATA[self.objective]["requirements"]

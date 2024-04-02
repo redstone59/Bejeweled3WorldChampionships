@@ -115,11 +115,11 @@ class ChallengeCreator:
         
         self.change_challenge_mode()
         
-        i = 1
+        y = 1
         for subchallenge in challenge_to_load.subchallenges:
-            i += 1
+            y += 1
             self.subchallenge_tree.insert("", "end", values = ["***"])
-            self.id_subchallenge_dict[f"I{str(i).zfill(3)}"] = subchallenge
+            self.id_subchallenge_dict[f"I{str(y).zfill(3)}"] = subchallenge
         
         self.change_tree_item_names()
     
@@ -177,6 +177,8 @@ class ChallengeCreator:
             self.time_box.insert(0, str(subchallenge.time))
             self.time_bonus_enabled.set(subchallenge.time_bonus_enabled)
         
+        self.update_subchallenge_objective()
+        
         self.poker_hand_box.delete(0, len(self.poker_hand_box.get()))
         if subchallenge.objective == "PokerHand":
             self.poker_hand_box.set(subchallenge.extra)
@@ -185,7 +187,6 @@ class ChallengeCreator:
         else:
             self.extra_box.set(1)
         
-        self.update_subchallenge_objective()
         self.update_subchallenge_mode()
     
     def new_subchallenge(self):

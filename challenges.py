@@ -34,13 +34,15 @@ class Subchallenge:
         result = {}
         result["objective"] = self.objective
         result["mode"] = self.mode
-        result["condition"] = self.condition
         
+        if self.mode == "value": result["condition"] = self.condition
         if self.time_bonus_enabled: result["time_bonus"] = True
         if self.time != None: result["time"] = self.time
         if self.extra != None: result["extra"] = self.extra
         
         result["multiplier"] = self.multiplier
+
+        return result
     
     def get_initial_value(self):
         open_requirements = CHALLENGE_DATA[self.objective]["requirements"]
@@ -193,9 +195,9 @@ def check_subchallenge_data(subchallenge: dict):
     if requires_time_field and "time" not in subchallenge.keys():
         raise InvalidSubchallengeError(f"No time specified for timed subchallenge {subchallenge["objective"]}")
 
-    poker_hands = ["Pair", "Spectrum", "Two Pair", "Three of a Kind", "Full House", "Four of a Kind", "Flush"]
+    poker_hands = ["Pair", "Spectrum", "2 Pair", "3 of a Kind", "Full House", "4 of a Kind", "Flush"]
     if subchallenge["objective"] == "PokerHand" and subchallenge["extra"] not in poker_hands:
-        raise InvalidSubchallengeError(f"No hand specificed for subchallenge {subchallenge["objective"]}")
+        raise InvalidSubchallengeError(f"No hand specified for subchallenge {subchallenge["objective"]}")
 
 def load_challenge_json(json_string):
     contents: dict = json.loads(json_string)
